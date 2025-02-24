@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -27,6 +30,16 @@ public class LocalFileContentManager implements ContentManager {
 
     @Override
     public File load(String filename) {
-        return null;
+        throw new IllegalStateException("Еще не реализовано");
+    }
+
+    @Override
+    public List<File> loadAllFiles(String directoryPath) throws IOException {
+        try (var stream = Files.list(Paths.get(basePath + "/" + directoryPath))) {
+            return stream
+                    .filter(path -> !Files.isDirectory(path))
+                    .map(path -> new File(path.toFile().getAbsolutePath()))
+                    .toList();
+        }
     }
 }

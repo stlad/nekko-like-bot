@@ -11,11 +11,15 @@ import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.vaganov.nekkolike.contentmanager.ContentManager;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -42,6 +46,12 @@ public class NekkoBot extends TelegramLongPollingBot {
     private void processUpdate(Update update) throws TelegramApiException {
         if (update.getMessage().hasPhoto()) {
             this.downloadPhoto(update);
+        } else if (update.getMessage().hasText()
+                && (update.getMessage().getText().equals("/show_my_photos")
+                || update.getMessage().getText().equals("Посмотреть мои картинки"))) {
+            getAllPhotos(update);
+        } else if (update.getMessage().hasText() && update.getMessage().getText().equals("/main_menu")) {
+            drawButtonMenu(update);
         }
     }
 
@@ -69,12 +79,27 @@ public class NekkoBot extends TelegramLongPollingBot {
         execute(message);
     }
 
-    private void sendPhoto(Update update, InputFile photo) throws TelegramApiException {
-        this.execute(SendPhoto.builder()
-                .chatId(update.getMessage().getChatId())
-                .photo(photo)
-                .build()
-        );
+    private void getAllPhotos(Update update) throws TelegramApiException {
+        try {
+            var message = SendMessage.builder()
+                    .text("Ваши картинки:")
+                    .chatId(update.getMessage().getChatId())
+                    .build();
+            execute(message);
+
+            var photos = contentManager.loadAllFiles(update.getMessage().getChatId().toString());
+            for (var file : photos) {
+                var sendPhoto = new SendPhoto(update.getMessage().getChatId().toString(), new InputFile(file));
+                execute(sendPhoto);
+            }
+        } catch (IOException exception) {
+            var message = SendMessage.builder()
+                    .text("Не удалось сохранить ваше изображение")
+                    .chatId(update.getMessage().getChatId())
+                    .build();
+            logger.error(exception.getMessage());
+            execute(message);
+        }
     }
 
     @Override
@@ -85,6 +110,22 @@ public class NekkoBot extends TelegramLongPollingBot {
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void drawButtonMenu(Update update) throws TelegramApiException {
+        var message = SendMessage.builder()
+                .chatId(update.getMessage().getChatId())
+                .text("Главное меню");
+
+        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+        var rows = new ArrayList<KeyboardRow>();
+        var buttons = new ArrayList<KeyboardButton>();
+        buttons.add(new KeyboardButton("Посмотреть мои картинки"));
+        rows.add(new KeyboardRow(buttons));
+
+        replyKeyboardMarkup.setKeyboard(rows);
+        message.replyMarkup(replyKeyboardMarkup);
+        execute(message.build());
     }
 
 
