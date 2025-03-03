@@ -7,10 +7,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.vaganov.nekkolike.bot.commands.CommandExecutor;
 import ru.vaganov.nekkolike.bot.request.RequestHandler;
 import ru.vaganov.nekkolike.bot.response.ResponseSender;
-import ru.vaganov.nekkolike.bot.response.SendObjectWrapper;
 
 @Component
 @RequiredArgsConstructor
@@ -30,8 +29,8 @@ public class NekkoBot extends TelegramLongPollingBot {
 
     private void processUpdate(Update update) {
         var command = requestHandler.mapToCommand(update);
-        var response = commandExecutor.executeCommand(command, update);
-        responseSender.send(response);
+        var response = commandExecutor.executeCommand(command, update, this);
+        responseSender.send(response, this);
     }
 
 

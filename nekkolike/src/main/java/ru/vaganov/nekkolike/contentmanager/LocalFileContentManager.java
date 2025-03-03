@@ -25,12 +25,7 @@ public class LocalFileContentManager implements ContentManager {
     public void save(String filename, InputStream inputStream) throws IOException {
         var file = new File(String.format("%s/%s", basePath, filename));
         FileUtils.copyInputStreamToFile(inputStream, file);
-        log.info("file {} saved at: {}", file.getName(), file.getAbsolutePath());
-    }
-
-    @Override
-    public File load(String filename) {
-        throw new IllegalStateException("Еще не реализовано");
+        log.info("Файл {} сахранен в: {}", file.getName(), file.getAbsolutePath());
     }
 
     @Override

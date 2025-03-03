@@ -3,7 +3,7 @@ package ru.vaganov.nekkolike.bot.request;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.vaganov.nekkolike.bot.BotCommand;
+import ru.vaganov.nekkolike.bot.commands.BotCommand;
 
 @RequiredArgsConstructor
 @Component

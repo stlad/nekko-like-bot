@@ -9,7 +9,5 @@ public interface ContentManager {
 
     void save(String filename, InputStream inputStream) throws IOException;
 
-    File load(String filename);
-
     List<File> loadAllFiles(String directoryPath) throws IOException;
 }

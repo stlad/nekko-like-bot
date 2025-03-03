@@ -4,10 +4,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.vaganov.nekkolike.bot.commands.BotCommand;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,13 +36,15 @@ public class ResponseMessageProcessor {
                 .chatId(update.getMessage().getChatId())
                 .text("Главное меню");
 
-        var replyKeyboardMarkup = new ReplyKeyboardMarkup();
-        var buttons = List.of(new KeyboardButton("Посмотреть мои картинки"));
-        var rows = List.of(new KeyboardRow(buttons));
+        var keyboard = new InlineKeyboardMarkup();
+        var k = new InlineKeyboardButton("меню");
+        k.setCallbackData(BotCommand.MOVE_TO_MAIN_MENU.getCallbackPrefix());
 
-        replyKeyboardMarkup.setKeyboard(rows);
-        message.replyMarkup(replyKeyboardMarkup);
+        var buttons = List.of(k);
+        var rows = List.of(buttons);
+        message.replyMarkup(new InlineKeyboardMarkup(rows));
         return message.build();
     }
+
 
 }
