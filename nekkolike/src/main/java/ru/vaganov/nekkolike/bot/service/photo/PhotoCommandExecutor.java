@@ -1,6 +1,5 @@
-package ru.vaganov.nekkolike.bot.commands.photos;
+package ru.vaganov.nekkolike.bot.service.photo;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -14,17 +13,24 @@ import ru.vaganov.nekkolike.contentmanager.ContentManager;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class PhotoCommandExecutor {
 
     private final ContentManager contentManager;
+
+    //TODO противорчет state-less подходу. Но необходим, чтобы запомнить страницу пользователя
+    private final Map<String, Integer> userPhotoPages;
+
+    public PhotoCommandExecutor(ContentManager contentManager) {
+        this.contentManager = contentManager;
+        userPhotoPages = new HashMap<>();
+    }
 
     public SendMessage executeSavePhoto(Update update, TelegramLongPollingBot bot) {
         var photo = update.getMessage().getPhoto().stream().max(Comparator.comparing(PhotoSize::getFileSize)).orElseThrow();
@@ -61,13 +67,11 @@ public class PhotoCommandExecutor {
         }
     }
 
-//    private SendPhoto getPhoto(Update update, TelegramLongPollingBot bot) throws TelegramApiException {
+    public SendPhoto executeGetPhoto(Update update, TelegramLongPollingBot bot) {
+        return new SendPhoto();
+
+    }
 //        try {
-//            var message = SendMessage.builder()
-//                    .text("Ваши картинки:")
-//                    .chatId(update.getMessage().getChatId())
-//                    .build();
-//            execute(message);
 //
 //            var photos = contentManager.loadAllFiles(update.getMessage().getChatId().toString());
 //            for (var file : photos) {

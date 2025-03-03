@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.vaganov.nekkolike.bot.commands.CommandExecutor;
-import ru.vaganov.nekkolike.bot.request.RequestHandler;
+import ru.vaganov.nekkolike.bot.service.CommandExecutor;
+import ru.vaganov.nekkolike.bot.commands.MessageCommandMapper;
 import ru.vaganov.nekkolike.bot.response.ResponseSender;
 
 @Component
@@ -23,17 +23,14 @@ public class NekkoBot extends TelegramLongPollingBot {
     @Value("${telegram.token}")
     private String token;
 
-    private final RequestHandler requestHandler;
     private final CommandExecutor commandExecutor;
     private final ResponseSender responseSender;
 
     private void processUpdate(Update update) {
-        var command = requestHandler.mapToCommand(update);
+        var command = MessageCommandMapper.extractCommand(update);
         var response = commandExecutor.executeCommand(command, update, this);
         responseSender.send(response, this);
     }
-
-
 
     @Override
     public void onUpdateReceived(Update update) {

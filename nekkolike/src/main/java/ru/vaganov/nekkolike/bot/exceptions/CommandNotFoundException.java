@@ -1,4 +1,4 @@
-package ru.vaganov.nekkolike.exceptions;
+package ru.vaganov.nekkolike.bot.exceptions;
 
 public class CommandNotFoundException extends RuntimeException {
 
