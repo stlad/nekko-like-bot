@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.vaganov.nekkolike.bot.exceptions.FileProcessingException;
+import ru.vaganov.nekkolike.bot.utils.TelegramBotUtils;
 import ru.vaganov.nekkolike.contentmanager.ContentManager;
 
 import java.io.File;
@@ -43,16 +44,16 @@ public class PhotoCommandExecutor {
             var getfile = new GetFile(fileId);
             getfile.setFileId(fileId);
             var telegramRemoteFilePath = bot.execute(getfile).getFilePath();
-            var filename = String.format("%s/%s.jpg", update.getMessage().getChatId(), photo.getFileUniqueId());
+            var filename = String.format("%s/%s.jpg", TelegramBotUtils.extractChatId(update), photo.getFileUniqueId());
             var targetFile = File.createTempFile(filename, ".tmp");
 
-            log.info("Обработка фото с id: {} из чата: {}", photo.getFileId(), update.getMessage().getChatId());
+            log.info("Обработка фото с id: {} из чата: {}", photo.getFileId(), TelegramBotUtils.extractChatId(update));
             bot.downloadFile(telegramRemoteFilePath, targetFile);
             contentManager.save(filename, new FileInputStream(targetFile));
 
             targetFile.deleteOnExit();
             return SendMessage.builder()
-                    .chatId(update.getMessage().getChatId())
+                    .chatId(TelegramBotUtils.extractChatId(update))
                     .text("Ваше фото сохранено")
                     .build();
         } catch (TelegramApiException | IOException exception) {
@@ -62,46 +63,55 @@ public class PhotoCommandExecutor {
     }
 
     public SendPhoto getFirstPhoto(Update update, TelegramLongPollingBot bot) {
-        var chatId = update.getMessage().getChatId().toString();
+        var chatId = TelegramBotUtils.extractChatId(update);
         userPhotoPages.put(chatId, 0);
 
         return loadPhotoFromCM(update, 0);
     }
 
     public SendPhoto getNextPhoto(Update update, TelegramLongPollingBot bot) {
-        var chatId = update.getMessage().getChatId().toString();
+        var chatId = TelegramBotUtils.extractChatId(update);
         if (!userPhotoPages.containsKey(chatId)) {
             return getFirstPhoto(update, bot);
         }
-        var photo = loadPhotoFromCM(update, userPhotoPages.get(chatId));
-        userPhotoPages.put(chatId, userPhotoPages.get(chatId) + 1);
+        var targetPage = userPhotoPages.get(chatId) + 1;
+        var photo = loadPhotoFromCM(update, targetPage);
+        userPhotoPages.put(chatId, targetPage);
         return photo;
     }
 
     public SendPhoto getPrevPhoto(Update update, TelegramLongPollingBot bot) {
-        var chatId = update.getMessage().getChatId().toString();
-        if (!userPhotoPages.containsKey(chatId) || userPhotoPages.get(chatId) == 1) {
+        var chatId = TelegramBotUtils.extractChatId(update);
+        if (!userPhotoPages.containsKey(chatId) || userPhotoPages.get(chatId) <= 1) {
             return getFirstPhoto(update, bot);
         }
-        var photo = loadPhotoFromCM(update, userPhotoPages.get(chatId));
-        userPhotoPages.put(chatId, userPhotoPages.get(chatId) - 1);
+        var targetPage = userPhotoPages.get(chatId) - 1;
+        var photo = loadPhotoFromCM(update, targetPage);
+        userPhotoPages.put(chatId, targetPage);
         return photo;
     }
 
     private SendPhoto loadPhotoFromCM(Update update, int page) {
+        var chatId = TelegramBotUtils.extractChatId(update);
+        log.info("Загрузка фото {} для чата {}", page, chatId);
         List<File> photos;
         try {
-            photos = contentManager.loadAllFiles(update.getMessage().getChatId().toString());
+            photos = contentManager.loadAllFiles(chatId).stream()
+                    .filter(file -> file.getName().endsWith(".jpg")
+                            || file.getName().endsWith(".png"))
+                    .toList();
         } catch (IOException exception) {
-            log.error("Не удалось получить фото для чата {}", update.getMessage().getChatId(), exception);
+            log.error("Не удалось получить фото для чата {}", chatId, exception);
             throw new FileProcessingException("Не удалось получить фото", exception);
         }
 
-        if (page < 0 || page > photos.size()) {
-            throw new FileProcessingException("Не удалось получить фото c индексом " + page);
+        if (page < 0) {
+            throw new FileProcessingException("Предыдущих фотографий нет");
+        }
+        if (page >= photos.size()) {
+            throw new FileProcessingException("Дальше фотографий нет");
         }
 
-        return new SendPhoto(update.getMessage().getChatId().toString(), new InputFile(photos.get(page)));
-
+        return new SendPhoto(chatId, new InputFile(photos.get(page)));
     }
 }

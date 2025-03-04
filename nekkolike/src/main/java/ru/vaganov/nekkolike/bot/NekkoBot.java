@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.vaganov.nekkolike.bot.service.CommandExecutor;
 import ru.vaganov.nekkolike.bot.commands.MessageCommandMapper;
 import ru.vaganov.nekkolike.bot.response.ResponseSender;
+import ru.vaganov.nekkolike.bot.service.CommandExecutor;
 
 @Component
 @RequiredArgsConstructor
@@ -34,7 +34,12 @@ public class NekkoBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        logger.info("{} from {}", update.getMessage().getText(), update.getMessage().getChatId());
+        if (update.getMessage() != null) {
+            logger.info("Message: {} from {}", update.getMessage().getText(), update.getMessage().getChatId());
+        }
+        if (update.getCallbackQuery() != null) {
+            logger.info("CallbackQuery: {} from {}", update.getCallbackQuery().getData(), update.getCallbackQuery().getMessage().getChatId());
+        }
         processUpdate(update);
     }
 

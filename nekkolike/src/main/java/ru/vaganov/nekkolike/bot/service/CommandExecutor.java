@@ -29,22 +29,22 @@ public class CommandExecutor {
         switch (command) {
             case SAVE_PHOTO -> {
                 var response = photoCommandExecutor.savePhoto(update, bot);
-                return new SendObjectWrapper(response, update);
+                return responseMessageProcessor.preparePhotoWithMenuButton(response, update);
             }
             case GET_PHOTO -> {
                 var response = photoCommandExecutor.getFirstPhoto(update, bot);
-                return new SendObjectWrapper(response, update);
+                return responseMessageProcessor.preparePhotoWithNextPrevButtons(response, update);
             }
             case GET_PHOTO_NEXT -> {
                 var response = photoCommandExecutor.getNextPhoto(update, bot);
-                return new SendObjectWrapper(response, update);
+                return responseMessageProcessor.preparePhotoWithNextPrevButtons(response, update);
             }
             case GET_PHOTO_PREV -> {
                 var response = photoCommandExecutor.getPrevPhoto(update, bot);
-                return new SendObjectWrapper(response, update);
+                return responseMessageProcessor.preparePhotoWithNextPrevButtons(response, update);
             }
             case MOVE_TO_MAIN_MENU -> {
-                return responseMessageProcessor.drawMainMenu(update);
+                return responseMessageProcessor.prepareMainMenu(update);
             }
             default -> {
                 return responseMessageProcessor.prepareErrorResponse(update, "Не удалось обработать команду");

@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -30,10 +31,11 @@ public class LocalFileContentManager implements ContentManager {
 
     @Override
     public List<File> loadAllFiles(String directoryPath) throws IOException {
-        try (var stream = Files.list(Paths.get(basePath + "/" + directoryPath))) {
+        log.trace("Загрузка файлов из директории {}", directoryPath);
+        try (var stream = Files.list(Paths.get(basePath + directoryPath))) {
             return stream
                     .filter(path -> !Files.isDirectory(path))
-                    .map(path -> new File(path.toFile().getAbsolutePath()))
+                    .map(Path::toFile)
                     .toList();
         }
     }

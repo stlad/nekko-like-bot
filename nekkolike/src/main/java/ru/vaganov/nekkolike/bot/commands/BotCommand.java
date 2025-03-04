@@ -18,10 +18,9 @@ public enum BotCommand {
 
     private final String callbackPrefix;
 
-    public static BotCommand fromCallBack(String callback) {
-        var rawCallBack = callback.split("/")[0];
+    public static BotCommand fromString(String str) {
         return Arrays.stream(BotCommand.values())
                 .filter(cmd -> cmd.getCallbackPrefix() != null)
-                .filter(cmd -> cmd.callbackPrefix.startsWith(rawCallBack)).findAny().orElse(NONE);
+                .filter(cmd -> cmd.callbackPrefix.startsWith(str)).findAny().orElse(NONE);
     }
 }

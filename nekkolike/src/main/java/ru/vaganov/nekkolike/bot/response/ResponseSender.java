@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import ru.vaganov.nekkolike.bot.utils.TelegramBotUtils;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -19,7 +20,9 @@ public class ResponseSender {
                 bot.execute(wrapper.getSendPhoto());
             }
         } catch (Throwable e) {
-            log.error("Ошибка при отправке сообщения в чат {}", wrapper.getUpdate().getMessage().getChatId());
+            var update = wrapper.getUpdate();
+            var chatID = TelegramBotUtils.extractChatId(update);
+            log.error("Ошибка при отправке сообщения в чат {}", chatID, e);
         }
     }
 }
