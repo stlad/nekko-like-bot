@@ -12,6 +12,8 @@ public enum BotCommand {
     MOVE_TO_MAIN_MENU("main_menu"),
     SAVE_PHOTO(null),
     GET_PHOTO("photo"),
+    GET_PHOTO_NEXT("photo_next"),
+    GET_PHOTO_PREV("photo_prev"),
     NONE(null);
 
     private final String callbackPrefix;

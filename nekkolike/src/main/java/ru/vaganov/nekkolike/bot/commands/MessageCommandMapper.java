@@ -18,12 +18,6 @@ public class MessageCommandMapper {
         return BotCommand.NONE;
     }
 
-    public static PhotoPage extractPhotoPage(Update update) {
-        if (!extractCommand(update).equals(BotCommand.GET_PHOTO)) {
-            throw new CommandNotFoundException(update.getCallbackQuery().getData());
-        }
-        return PhotoPage.valueOf(update.getCallbackQuery().getData().split("/")[2]);
-    }
 
     private static String getParamFromCallback(Update update, int param) {
         return update.getCallbackQuery().getData().split("/")[param];
