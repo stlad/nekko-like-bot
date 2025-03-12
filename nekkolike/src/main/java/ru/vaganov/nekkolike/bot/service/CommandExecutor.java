@@ -17,30 +17,30 @@ public class CommandExecutor {
     private final PhotoCommandExecutor photoCommandExecutor;
     private final ResponseMessageProcessor responseMessageProcessor;
 
-    public SendObjectWrapper executeCommand(BotCommand command, Update update, TelegramLongPollingBot bot) {
+    public SendObjectWrapper executeCommand(String chatId, BotCommand command, Update update, TelegramLongPollingBot bot) {
         try {
-            return chooseExecution(command, update, bot);
+            return chooseExecution(chatId, command, update, bot);
         } catch (FileProcessingException exception) {
             return responseMessageProcessor.prepareErrorResponse(update, exception.getMessage());
         }
     }
 
-    private SendObjectWrapper chooseExecution(BotCommand command, Update update, TelegramLongPollingBot bot) {
+    private SendObjectWrapper chooseExecution(String chatId, BotCommand command, Update update, TelegramLongPollingBot bot) {
         switch (command) {
             case SAVE_PHOTO -> {
-                var response = photoCommandExecutor.savePhoto(update, bot);
+                var response = photoCommandExecutor.savePhoto(chatId, update, bot);
                 return responseMessageProcessor.preparePhotoWithMenuButton(response, update);
             }
             case GET_PHOTO -> {
-                var response = photoCommandExecutor.getFirstPhoto(update, bot);
+                var response = photoCommandExecutor.getFirstPhoto(chatId);
                 return responseMessageProcessor.preparePhotoWithNextPrevButtons(response, update);
             }
             case GET_PHOTO_NEXT -> {
-                var response = photoCommandExecutor.getNextPhoto(update, bot);
+                var response = photoCommandExecutor.getNextPhoto(chatId);
                 return responseMessageProcessor.preparePhotoWithNextPrevButtons(response, update);
             }
             case GET_PHOTO_PREV -> {
-                var response = photoCommandExecutor.getPrevPhoto(update, bot);
+                var response = photoCommandExecutor.getPrevPhoto(chatId);
                 return responseMessageProcessor.preparePhotoWithNextPrevButtons(response, update);
             }
             case MOVE_TO_MAIN_MENU -> {

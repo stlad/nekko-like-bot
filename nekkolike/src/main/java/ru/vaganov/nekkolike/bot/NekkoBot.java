@@ -10,6 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.vaganov.nekkolike.bot.commands.MessageCommandMapper;
 import ru.vaganov.nekkolike.bot.response.ResponseSender;
 import ru.vaganov.nekkolike.bot.service.CommandExecutor;
+import ru.vaganov.nekkolike.bot.utils.TelegramBotUtils;
 
 @Component
 @RequiredArgsConstructor
@@ -28,7 +29,8 @@ public class NekkoBot extends TelegramLongPollingBot {
 
     private void processUpdate(Update update) {
         var command = MessageCommandMapper.extractCommand(update);
-        var response = commandExecutor.executeCommand(command, update, this);
+        var chatId = TelegramBotUtils.extractChatId(update);
+        var response = commandExecutor.executeCommand(chatId, command, update, this);
         responseSender.send(response, this);
     }
 
