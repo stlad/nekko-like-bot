@@ -4,34 +4,36 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.vaganov.nekkolike.bot.commands.BotCommand;
+import ru.vaganov.nekkolike.bot.utils.SendObjectWrapper;
 import ru.vaganov.nekkolike.bot.utils.TelegramBotUtils;
+import ru.vaganov.nekkolike.bot.utils.UpdateData;
 
+import java.io.File;
 import java.util.List;
 
 @Slf4j
 @Component
-public class ResponseMessageProcessor {
+public class MessageBuilder {
 
-    public SendObjectWrapper prepareErrorResponse(Update update, String message) {
+    public static SendObjectWrapper errorResponse(Long chatId, String message) {
 
         return new SendObjectWrapper(
                 SendMessage.builder()
                         .text(message)
-                        .chatId(TelegramBotUtils.extractChatId(update))
+                        .chatId(chatId)
                         .build(),
-                update
+                chatId
         );
     }
 
-
-    public SendObjectWrapper prepareMainMenu(Update update) {
-        var chatID = TelegramBotUtils.extractChatId(update);
+    public static SendObjectWrapper mainMenu(Long chatId) {
         var message = SendMessage.builder()
-                .chatId(chatID)
+                .chatId(chatId)
                 .text("Главное меню");
 
         var menu = new InlineKeyboardButton("меню");
@@ -42,10 +44,10 @@ public class ResponseMessageProcessor {
         var buttons = List.of(menu, photos);
         var rows = List.of(buttons);
         message.replyMarkup(new InlineKeyboardMarkup(rows));
-        return new SendObjectWrapper(message.build(), update);
+        return new SendObjectWrapper(message.build(), chatId);
     }
 
-    public SendObjectWrapper preparePhotoWithNextPrevButtons(SendPhoto photo, Update update) {
+    public static SendObjectWrapper photoWithNextPrevButtons(Long chatId, File photo) {
         var menu = new InlineKeyboardButton("меню");
         menu.setCallbackData(BotCommand.MOVE_TO_MAIN_MENU.getCallbackPrefix());
         var prevPhoto = new InlineKeyboardButton("Назад");
@@ -56,17 +58,26 @@ public class ResponseMessageProcessor {
         var prevNextRow = List.of(prevPhoto, nextPhoto);
         var menuRow = List.of(menu);
         var rows = List.of(prevNextRow, menuRow);
-        photo.setReplyMarkup(new InlineKeyboardMarkup(rows));
-        return new SendObjectWrapper(photo, update);
+
+        var sendPhoto = new SendPhoto(chatId.toString(), new InputFile(photo));
+        sendPhoto.setReplyMarkup(new InlineKeyboardMarkup(rows));
+
+        return new SendObjectWrapper(sendPhoto, chatId);
     }
 
-    public SendObjectWrapper preparePhotoWithMenuButton(SendMessage message, Update update) {
+    public static SendObjectWrapper textWithMenuButton(Long chatId, String text) {
         var menu = new InlineKeyboardButton("меню");
         menu.setCallbackData(BotCommand.MOVE_TO_MAIN_MENU.getCallbackPrefix());
 
         var menuRow = List.of(menu);
         var rows = List.of(menuRow);
-        message.setReplyMarkup(new InlineKeyboardMarkup(rows));
-        return new SendObjectWrapper(message, update);
+
+        var message = SendMessage.builder()
+                .chatId(chatId)
+                .text(text)
+                .replyMarkup(new InlineKeyboardMarkup(rows))
+                .build();
+
+        return new SendObjectWrapper(message, chatId);
     }
 }

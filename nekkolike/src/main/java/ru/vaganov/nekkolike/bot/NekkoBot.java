@@ -29,8 +29,8 @@ public class NekkoBot extends TelegramLongPollingBot {
 
     private void processUpdate(Update update) {
         var command = MessageCommandMapper.extractCommand(update);
-        var chatId = TelegramBotUtils.extractChatId(update);
-        var response = commandExecutor.executeCommand(chatId, command, update, this);
+        var updateData = TelegramBotUtils.updateData(update);
+        var response = commandExecutor.executeCommand(command, updateData, this);
         responseSender.send(response, this);
     }
 
