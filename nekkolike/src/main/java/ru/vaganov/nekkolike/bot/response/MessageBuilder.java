@@ -5,13 +5,10 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
-import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.vaganov.nekkolike.bot.commands.BotCommand;
 import ru.vaganov.nekkolike.bot.utils.SendObjectWrapper;
-import ru.vaganov.nekkolike.bot.utils.TelegramBotUtils;
-import ru.vaganov.nekkolike.bot.utils.UpdateData;
 
 import java.io.File;
 import java.util.List;

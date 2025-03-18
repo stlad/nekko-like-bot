@@ -15,7 +15,6 @@ import ru.vaganov.nekkolike.bot.utils.UpdateData;
 public class CommandExecutor {
 
     private final PhotoCommandExecutor photoCommandExecutor;
-    private final MessageBuilder messageBuilder;
 
     public SendObjectWrapper executeCommand(BotCommand command, UpdateData updateData, TelegramLongPollingBot bot) {
         try {

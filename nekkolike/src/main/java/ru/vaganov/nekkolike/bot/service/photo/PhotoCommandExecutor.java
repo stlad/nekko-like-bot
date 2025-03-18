@@ -4,8 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.GetFile;
-import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
-import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.vaganov.nekkolike.bot.exceptions.FileProcessingException;
 import ru.vaganov.nekkolike.contentmanager.ContentManager;
@@ -15,6 +13,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
@@ -33,18 +32,9 @@ public class PhotoCommandExecutor {
 
     public void savePhoto(Long chatId, String photoId, TelegramLongPollingBot bot) throws FileProcessingException {
         try {
-
-            var getfile = new GetFile(photoId);
-            getfile.setFileId(photoId);
-            var telegramRemoteFilePath = bot.execute(getfile).getFilePath();
-            var filename = String.format("%s/%s.jpg", chatId, photoId);
-            var targetFile = File.createTempFile(filename, ".tmp");
-
-            log.info("Обработка фото с id: {} из чата: {}", photoId, chatId);
-            bot.downloadFile(telegramRemoteFilePath, targetFile);
-            contentManager.save(filename, new FileInputStream(targetFile));
-
-            targetFile.deleteOnExit();
+            var telegramFile = bot.execute(new GetFile(photoId));
+            var localFile = bot.downloadFile(telegramFile);
+            contentManager.save(chatId + "/" + UUID.randomUUID() + ".jpg", new FileInputStream(localFile));
         } catch (TelegramApiException | IOException exception) {
             log.error("Не удалось сохранить файл {}", photoId, exception);
             throw new FileProcessingException("Не удалось сохранить файл " + photoId, exception);
