@@ -18,10 +18,10 @@ public class MessageCommandMapper {
     }
 
     private static String getParamFromCallback(Update update) {
-        return update.getCallbackQuery().getData().split("/")[0];
+        return update.getCallbackQuery().getData();
     }
 
     private static String getParamFromMessage(Update update) {
-        return update.getMessage().getText().split("/")[0];
+        return update.getMessage().getText();
     }
 }
