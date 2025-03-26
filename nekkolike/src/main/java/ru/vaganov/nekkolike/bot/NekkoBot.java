@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.vaganov.nekkolike.bot.commands.MessageCommandMapper;
-import ru.vaganov.nekkolike.bot.response.ResponseSender;
 import ru.vaganov.nekkolike.bot.service.CommandExecutor;
+import ru.vaganov.nekkolike.bot.utils.SendObjectWrapper;
 import ru.vaganov.nekkolike.bot.utils.TelegramBotUtils;
 
 @Component
@@ -31,7 +31,7 @@ public class NekkoBot extends TelegramLongPollingBot {
         var command = MessageCommandMapper.extractCommand(update);
         var updateData = TelegramBotUtils.updateData(update);
         var response = commandExecutor.executeCommand(command, updateData, this);
-        responseSender.send(response, this);
+        this.send(response);
     }
 
     @Override
@@ -43,6 +43,19 @@ public class NekkoBot extends TelegramLongPollingBot {
             logger.info("CallbackQuery: {} from {}", update.getCallbackQuery().getData(), update.getCallbackQuery().getMessage().getChatId());
         }
         processUpdate(update);
+    }
+
+    private void send(SendObjectWrapper wrapper) {
+        try {
+            if (wrapper.getSendMessage() != null) {
+                this.execute(wrapper.getSendMessage());
+            }
+            if (wrapper.getSendPhoto() != null) {
+                this.execute(wrapper.getSendPhoto());
+            }
+        } catch (Throwable e) {
+            logger.error("Ошибка при отправке сообщения в чат {}", wrapper.getChatId(), e);
+        }
     }
 
     @Override
