@@ -37,3 +37,4 @@ mvnw
 mvnw.cmd
 
 src/main/resources/application-secure.yml
+**/data/**

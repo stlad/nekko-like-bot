@@ -1,5 +1,4 @@
-server:
-  port: 8080
+
 
 spring:
   profiles:
@@ -8,3 +7,6 @@ spring:
 telegram:
   token: token
   name: name
+
+content-manager:
+  base-path: C:\Projects\nekko-like-bot\nekkolike\data\library\
