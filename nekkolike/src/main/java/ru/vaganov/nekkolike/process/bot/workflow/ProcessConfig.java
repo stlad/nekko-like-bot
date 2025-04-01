@@ -10,12 +10,13 @@ import java.util.List;
 @Configuration
 public class ProcessConfig {
 
+    /**
+     * @param steps Spring внедрит сюда все Singleton-объекты классов, реалзующих интерфейс ProcessStep
+     */
     @Bean
     public ProcessEngine processEngine(List<ProcessStep> steps) {
         var engine = new ProcessEngine();
-        steps.forEach(step ->
-                engine.registerStep(step)
-        );
+        steps.forEach(engine::registerStep);
         return engine;
     }
 }
