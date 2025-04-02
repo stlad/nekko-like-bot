@@ -9,6 +9,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 public enum BotCommand {
 
+    START("start"),
     MOVE_TO_MAIN_MENU("main_menu"),
     SAVE_PHOTO(null),
     GET_PHOTO("photo"),
