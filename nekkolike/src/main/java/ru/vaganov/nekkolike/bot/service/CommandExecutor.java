@@ -5,6 +5,9 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import ru.vaganov.nekkolike.bot.commands.BotCommand;
 import ru.vaganov.nekkolike.bot.exceptions.FileProcessingException;
+import ru.vaganov.nekkolike.bot.process.ProcessContext;
+import ru.vaganov.nekkolike.bot.process.workflow.StartState;
+import ru.vaganov.nekkolike.bot.process.workflow.UsernameReceivedState;
 import ru.vaganov.nekkolike.bot.response.MessageBuilder;
 import ru.vaganov.nekkolike.bot.service.photo.PhotoCommandExecutor;
 import ru.vaganov.nekkolike.bot.utils.SendObjectWrapper;
@@ -15,6 +18,7 @@ import ru.vaganov.nekkolike.bot.utils.UpdateData;
 public class CommandExecutor {
 
     private final PhotoCommandExecutor photoCommandExecutor;
+    private final ProcessContext context;
 
     public SendObjectWrapper executeCommand(BotCommand command, UpdateData updateData, TelegramLongPollingBot bot) {
         try {
@@ -27,6 +31,18 @@ public class CommandExecutor {
     private SendObjectWrapper chooseExecution(BotCommand command, UpdateData updateData, TelegramLongPollingBot bot) {
         var chatId = updateData.chatId();
         switch (command) {
+            case START -> {
+                var process = context.getProcess(chatId);
+                process.setState(new StartState());
+                process.getState().start(process);
+                return MessageBuilder.askForName(chatId);
+            }
+            case USERNAME_RECEIVED -> {
+                var process = context.getProcess(chatId);
+                process.setState(new UsernameReceivedState());
+                process.getState().usernameReceived(process, updateData.messageText());
+                return MessageBuilder.greetingsText(chatId, updateData.messageText());
+            }
             case SAVE_PHOTO -> {
                 photoCommandExecutor.savePhoto(chatId, updateData.photo().getFileId(), bot);
                 return MessageBuilder.textWithMenuButton(chatId, "Ваше фото сохранено");

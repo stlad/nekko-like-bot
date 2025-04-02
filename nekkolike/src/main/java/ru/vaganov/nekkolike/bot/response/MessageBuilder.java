@@ -77,4 +77,22 @@ public class MessageBuilder {
 
         return new SendObjectWrapper(message, chatId);
     }
+
+    public static SendObjectWrapper askForName(Long chatId) {
+        var message = SendMessage.builder()
+                .chatId(chatId)
+                .text("Как к вам обращаться?")
+                .build();
+
+        return new SendObjectWrapper(message, chatId);
+    }
+
+    public static SendObjectWrapper greetingsText(Long chatId, String username) {
+        var message = SendMessage.builder()
+                .chatId(chatId)
+                .text("Привет, " + username + "!")
+                .build();
+
+        return new SendObjectWrapper(message, chatId);
+    }
 }

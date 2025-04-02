@@ -1,4 +1,4 @@
-package ru.vaganov.nekkolike.process;
+package ru.vaganov.nekkolike.bot.process;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,5 +11,4 @@ public class ProcessInstance {
     private Long id;
     private String username;
     private ProcessState state;
-
 }

@@ -1,7 +1,7 @@
-package ru.vaganov.nekkolike.process;
+package ru.vaganov.nekkolike.bot.process;
 
 import org.springframework.stereotype.Component;
-import ru.vaganov.nekkolike.bot.workflow.StartState;
+import ru.vaganov.nekkolike.bot.process.workflow.StartState;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +22,13 @@ public class ProcessContext {
             initProcess(id, new StartState());
         }
         return processes.get(id);
+    }
+
+    public boolean isInState(ProcessInstance process,  Class<?> stateType){
+        if(process.getState() == null){
+            return false;
+        }
+        return stateType.isInstance(process.getState());
     }
 
 }
