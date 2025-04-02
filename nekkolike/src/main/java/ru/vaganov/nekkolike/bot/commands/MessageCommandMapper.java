@@ -1,27 +1,30 @@
 package ru.vaganov.nekkolike.bot.commands;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @RequiredArgsConstructor
+@Component
 public class MessageCommandMapper {
 
-    public static BotCommand extractCommand(Update update) {
-        if (update.getMessage() != null && update.getMessage().hasPhoto()) {
-            return BotCommand.SAVE_PHOTO;
-        } else if (update.getCallbackQuery() != null) {
-            return BotCommand.fromString(getParamFromCallback(update));
-        } else if (update.getMessage() != null) {
-            return BotCommand.fromString(getParamFromMessage(update));
+    public BotCommand extractCommand(Update update) {
+        if (update.getMessage() != null
+                && update.getMessage().getText() != null) {
+            if (update.getMessage().getText().startsWith("/")) {
+                return BotCommand.fromString(getParamFromMessage(update));
+            } else {
+                return BotCommand.USER_MESSAGE;
+            }
         }
         return BotCommand.NONE;
     }
 
-    private static String getParamFromCallback(Update update) {
+    private String getParamFromCallback(Update update) {
         return update.getCallbackQuery().getData();
     }
 
-    private static String getParamFromMessage(Update update) {
+    private String getParamFromMessage(Update update) {
         return update.getMessage().getText();
     }
 }
