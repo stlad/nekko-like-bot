@@ -15,12 +15,16 @@ public class TelegramBotUtils {
         }
     }
 
-    public static UpdateData updateData(Update update){
-        return new UpdateData(
-                extractChatId(update),
-                update.getMessage() == null ? null
-                        : update.getMessage().getPhoto()
-                        .stream().max(Comparator.comparing(PhotoSize::getFileSize)).orElse(null)
-        );
+    public static UpdateData createUpdateData(Update update) {
+        var chatId = extractChatId(update);
+        PhotoSize photo = null;
+        if (update.getMessage() != null && update.getMessage().getPhoto() != null) {
+            photo = update.getMessage().getPhoto()
+                    .stream().max(Comparator.comparing(PhotoSize::getFileSize))
+                    .orElse(null);
+        }
+        String messageText = update.getMessage() == null ? null : update.getMessage().getText();
+
+        return new UpdateData(chatId, photo, messageText);
     }
 }

@@ -2,52 +2,37 @@ package ru.vaganov.nekkolike.bot.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import ru.vaganov.nekkolike.bot.NekkoBot;
 import ru.vaganov.nekkolike.bot.commands.BotCommand;
 import ru.vaganov.nekkolike.bot.exceptions.FileProcessingException;
 import ru.vaganov.nekkolike.bot.response.MessageBuilder;
-import ru.vaganov.nekkolike.bot.service.photo.PhotoCommandExecutor;
-import ru.vaganov.nekkolike.bot.utils.SendObjectWrapper;
 import ru.vaganov.nekkolike.bot.utils.UpdateData;
+import ru.vaganov.nekkolike.business.process.NekkoProcessState;
+import ru.vaganov.nekkolike.processengine.context.ProcessContext;
 
 @Component
 @RequiredArgsConstructor
 public class CommandExecutor {
+    private final ProcessContext processContext;
 
-    private final PhotoCommandExecutor photoCommandExecutor;
-
-    public SendObjectWrapper executeCommand(BotCommand command, UpdateData updateData, TelegramLongPollingBot bot) {
+    public void executeCommand(BotCommand command, UpdateData updateData, NekkoBot bot) {
         try {
-            return chooseExecution(command, updateData, bot);
+            chooseExecution(command, updateData, bot);
         } catch (FileProcessingException exception) {
-            return MessageBuilder.errorResponse(updateData.chatId(), exception.getMessage());
+            bot.send(MessageBuilder.errorResponse(updateData.chatId(), exception.getMessage()));
         }
     }
 
-    private SendObjectWrapper chooseExecution(BotCommand command, UpdateData updateData, TelegramLongPollingBot bot) {
-        var chatId = updateData.chatId();
+    private void chooseExecution(BotCommand command, UpdateData updateData, NekkoBot bot) {
         switch (command) {
-            case SAVE_PHOTO -> {
-                photoCommandExecutor.savePhoto(chatId, updateData.photo().getFileId(), bot);
-                return MessageBuilder.textWithMenuButton(chatId, "Ваше фото сохранено");
+            case START -> {
+                processContext.runNextState(updateData.chatId(), NekkoProcessState.START, updateData.toArgs());
             }
-            case GET_PHOTO -> {
-                var photo = photoCommandExecutor.getFirstPhoto(chatId);
-                return MessageBuilder.photoWithNextPrevButtons(chatId, photo);
-            }
-            case GET_PHOTO_NEXT -> {
-                var photo = photoCommandExecutor.getNextPhoto(chatId);
-                return MessageBuilder.photoWithNextPrevButtons(chatId, photo);
-            }
-            case GET_PHOTO_PREV -> {
-                var photo = photoCommandExecutor.getPrevPhoto(chatId);
-                return MessageBuilder.photoWithNextPrevButtons(chatId, photo);
-            }
-            case MOVE_TO_MAIN_MENU -> {
-                return MessageBuilder.mainMenu(chatId);
+            case USER_MESSAGE -> {
+                processContext.continueCurrentState(updateData.chatId(), updateData.toArgs());
             }
             default -> {
-                return MessageBuilder.errorResponse(chatId, "Не удалось обработать команду");
+                bot.send(MessageBuilder.errorResponse(updateData.chatId(), "Не удалось обработать команду"));
             }
         }
     }
