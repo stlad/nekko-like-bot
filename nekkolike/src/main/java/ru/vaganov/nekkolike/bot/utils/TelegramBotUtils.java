@@ -15,7 +15,7 @@ public class TelegramBotUtils {
         }
     }
 
-    public static UpdateData updateData(Update update) {
+    public static UpdateData createUpdateData(Update update) {
         var chatId = extractChatId(update);
         PhotoSize photo = null;
         if (update.getMessage() != null && update.getMessage().getPhoto() != null) {

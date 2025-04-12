@@ -31,11 +31,11 @@ public class MessageBuilder {
     public static SendObjectWrapper mainMenu(Long chatId) {
         var message = SendMessage.builder()
                 .chatId(chatId)
-                .text("Главное меню");
+                .text(MessageTemplate.apply(MessageTemplate.MAIN_MENU));
 
-        var menu = new InlineKeyboardButton("меню");
+        var menu = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.MAIN_MENU));
         menu.setCallbackData(BotCommand.MOVE_TO_MAIN_MENU.getCallbackPrefix());
-        var photos = new InlineKeyboardButton("Посмотреть мои картинки");
+        var photos = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.SHOW_MY_PHOTOS));
         photos.setCallbackData(BotCommand.GET_PHOTO.getCallbackPrefix());
 
         var buttons = List.of(menu, photos);
@@ -45,11 +45,11 @@ public class MessageBuilder {
     }
 
     public static SendObjectWrapper photoWithNextPrevButtons(Long chatId, File photo) {
-        var menu = new InlineKeyboardButton("меню");
+        var menu = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.MAIN_MENU));
         menu.setCallbackData(BotCommand.MOVE_TO_MAIN_MENU.getCallbackPrefix());
-        var prevPhoto = new InlineKeyboardButton("Назад");
+        var prevPhoto = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.PREV));
         prevPhoto.setCallbackData(BotCommand.GET_PHOTO_PREV.getCallbackPrefix());
-        var nextPhoto = new InlineKeyboardButton("Далее");
+        var nextPhoto = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.NEXT));
         nextPhoto.setCallbackData(BotCommand.GET_PHOTO_NEXT.getCallbackPrefix());
 
         var prevNextRow = List.of(prevPhoto, nextPhoto);
@@ -63,7 +63,7 @@ public class MessageBuilder {
     }
 
     public static SendObjectWrapper textWithMenuButton(Long chatId, String text) {
-        var menu = new InlineKeyboardButton("меню");
+        var menu = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.MAIN_MENU));
         menu.setCallbackData(BotCommand.MOVE_TO_MAIN_MENU.getCallbackPrefix());
 
         var menuRow = List.of(menu);
@@ -81,7 +81,7 @@ public class MessageBuilder {
     public static SendObjectWrapper askForName(Long chatId) {
         var message = SendMessage.builder()
                 .chatId(chatId)
-                .text("Как к вам обращаться?")
+                .text(MessageTemplate.apply(MessageTemplate.ASK_NAME))
                 .build();
 
         return new SendObjectWrapper(message, chatId);
@@ -90,7 +90,7 @@ public class MessageBuilder {
     public static SendObjectWrapper greetingsText(Long chatId, String username) {
         var message = SendMessage.builder()
                 .chatId(chatId)
-                .text("Привет, " + username + "!")
+                .text(MessageTemplate.apply(MessageTemplate.GREETINGS, username))
                 .build();
 
         return new SendObjectWrapper(message, chatId);

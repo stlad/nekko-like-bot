@@ -12,7 +12,7 @@ public class ProcessContext {
     private final Map<Long, ProcessInstance> processes = new HashMap<>();
 
     public ProcessInstance initProcess(Long id, ProcessState state) {
-        var process = new ProcessInstance(id, null, state);
+        var process = ProcessInstance.create(id, null, state);
         processes.put(id, process);
         return process;
     }
