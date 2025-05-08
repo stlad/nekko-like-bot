@@ -28,39 +28,39 @@ public class MessageBuilder {
         );
     }
 
-    public static SendObjectWrapper mainMenu(Long chatId) {
-        var message = SendMessage.builder()
-                .chatId(chatId)
-                .text(MessageTemplate.apply(MessageTemplate.MAIN_MENU));
+//    public static SendObjectWrapper mainMenu(Long chatId) {
+//        var message = SendMessage.builder()
+//                .chatId(chatId)
+//                .text(MessageTemplate.apply(MessageTemplate.MAIN_MENU));
+//
+//        var menu = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.MAIN_MENU));
+//        menu.setCallbackData(BotCommand.MOVE_TO_MAIN_MENU.getCallbackPrefix());
+//        var photos = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.SHOW_MY_PHOTOS));
+//        photos.setCallbackData(BotCommand.GET_PHOTO.getCallbackPrefix());
+//
+//        var buttons = List.of(menu, photos);
+//        var rows = List.of(buttons);
+//        message.replyMarkup(new InlineKeyboardMarkup(rows));
+//        return new SendObjectWrapper(message.build(), chatId);
+//    }
 
-        var menu = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.MAIN_MENU));
-        menu.setCallbackData(BotCommand.MOVE_TO_MAIN_MENU.getCallbackPrefix());
-        var photos = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.SHOW_MY_PHOTOS));
-        photos.setCallbackData(BotCommand.GET_PHOTO.getCallbackPrefix());
-
-        var buttons = List.of(menu, photos);
-        var rows = List.of(buttons);
-        message.replyMarkup(new InlineKeyboardMarkup(rows));
-        return new SendObjectWrapper(message.build(), chatId);
-    }
-
-    public static SendObjectWrapper photoWithNextPrevButtons(Long chatId, File photo) {
-        var menu = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.MAIN_MENU));
-        menu.setCallbackData(BotCommand.MOVE_TO_MAIN_MENU.getCallbackPrefix());
-        var prevPhoto = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.PREV));
-        prevPhoto.setCallbackData(BotCommand.GET_PHOTO_PREV.getCallbackPrefix());
-        var nextPhoto = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.NEXT));
-        nextPhoto.setCallbackData(BotCommand.GET_PHOTO_NEXT.getCallbackPrefix());
-
-        var prevNextRow = List.of(prevPhoto, nextPhoto);
-        var menuRow = List.of(menu);
-        var rows = List.of(prevNextRow, menuRow);
-
-        var sendPhoto = new SendPhoto(chatId.toString(), new InputFile(photo));
-        sendPhoto.setReplyMarkup(new InlineKeyboardMarkup(rows));
-
-        return new SendObjectWrapper(sendPhoto, chatId);
-    }
+//    public static SendObjectWrapper photoWithNextPrevButtons(Long chatId, File photo) {
+//        var menu = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.MAIN_MENU));
+//        menu.setCallbackData(BotCommand.MOVE_TO_MAIN_MENU.getCallbackPrefix());
+//        var prevPhoto = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.PREV));
+//        prevPhoto.setCallbackData(BotCommand.GET_PHOTO_PREV.getCallbackPrefix());
+//        var nextPhoto = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.NEXT));
+//        nextPhoto.setCallbackData(BotCommand.GET_PHOTO_NEXT.getCallbackPrefix());
+//
+//        var prevNextRow = List.of(prevPhoto, nextPhoto);
+//        var menuRow = List.of(menu);
+//        var rows = List.of(prevNextRow, menuRow);
+//
+//        var sendPhoto = new SendPhoto(chatId.toString(), new InputFile(photo));
+//        sendPhoto.setReplyMarkup(new InlineKeyboardMarkup(rows));
+//
+//        return new SendObjectWrapper(sendPhoto, chatId);
+//    }
 
     public static SendObjectWrapper textWithMenuButton(Long chatId, String text) {
         var menu = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.MAIN_MENU));
