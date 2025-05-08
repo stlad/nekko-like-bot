@@ -3,24 +3,22 @@ package ru.vaganov.nekkolike.bot.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import ru.vaganov.nekkolike.bot.NekkoBot;
 import ru.vaganov.nekkolike.bot.commands.BotCommand;
 import ru.vaganov.nekkolike.bot.exceptions.FileProcessingException;
-import ru.vaganov.nekkolike.bot.process.ProcessContext;
-import ru.vaganov.nekkolike.bot.process.workflow.StartState;
-import ru.vaganov.nekkolike.bot.process.workflow.UsernameReceivedState;
 import ru.vaganov.nekkolike.bot.response.MessageBuilder;
-import ru.vaganov.nekkolike.bot.service.photo.PhotoCommandExecutor;
 import ru.vaganov.nekkolike.bot.utils.SendObjectWrapper;
 import ru.vaganov.nekkolike.bot.utils.UpdateData;
+import ru.vaganov.nekkolike.business.process.NekkoOutputMessageProvider;
+import ru.vaganov.nekkolike.business.process.NekkoProcessState;
+import ru.vaganov.nekkolike.processengine.ProcessEngine;
 
 @Component
 @RequiredArgsConstructor
 public class CommandExecutor {
+    private final ProcessEngine processEngine;
 
-    private final PhotoCommandExecutor photoCommandExecutor;
-    private final ProcessContext context;
-
-    public SendObjectWrapper executeCommand(BotCommand command, UpdateData updateData, TelegramLongPollingBot bot) {
+    public SendObjectWrapper executeCommand(BotCommand command, UpdateData updateData, NekkoBot bot) {
         try {
             return chooseExecution(command, updateData, bot);
         } catch (FileProcessingException exception) {
@@ -28,42 +26,19 @@ public class CommandExecutor {
         }
     }
 
-    private SendObjectWrapper chooseExecution(BotCommand command, UpdateData updateData, TelegramLongPollingBot bot) {
-        var chatId = updateData.chatId();
+    private SendObjectWrapper chooseExecution(BotCommand command, UpdateData updateData, NekkoBot bot) {
+        var out = new NekkoOutputMessageProvider(bot);
         switch (command) {
             case START -> {
-                var process = context.getProcess(chatId);
-                process.setState(new StartState());
-                process.getState().start(process);
-                return MessageBuilder.askForName(chatId);
-            }
-            case USERNAME_RECEIVED -> {
-                var process = context.getProcess(chatId);
-                process.setState(new UsernameReceivedState());
-                process.getState().usernameReceived(process, updateData.messageText());
-                return MessageBuilder.greetingsText(chatId, updateData.messageText());
-            }
-            case SAVE_PHOTO -> {
-                photoCommandExecutor.savePhoto(chatId, updateData.photo().getFileId(), bot);
-                return MessageBuilder.textWithMenuButton(chatId, "Ваше фото сохранено");
-            }
-            case GET_PHOTO -> {
-                var photo = photoCommandExecutor.getFirstPhoto(chatId);
-                return MessageBuilder.photoWithNextPrevButtons(chatId, photo);
-            }
-            case GET_PHOTO_NEXT -> {
-                var photo = photoCommandExecutor.getNextPhoto(chatId);
-                return MessageBuilder.photoWithNextPrevButtons(chatId, photo);
-            }
-            case GET_PHOTO_PREV -> {
-                var photo = photoCommandExecutor.getPrevPhoto(chatId);
-                return MessageBuilder.photoWithNextPrevButtons(chatId, photo);
-            }
-            case MOVE_TO_MAIN_MENU -> {
-                return MessageBuilder.mainMenu(chatId);
+                if (processEngine.getProcessInstance(updateData.chatId()).isEmpty()) {
+                    processEngine.initProcess(updateData.chatId(), NekkoProcessState.START);
+                }
+
+                processEngine.runCurrentState(updateData.chatId(), out, updateData.toArgs());
+                return MessageBuilder.askForName(updateData.chatId());
             }
             default -> {
-                return MessageBuilder.errorResponse(chatId, "Не удалось обработать команду");
+                return MessageBuilder.errorResponse(updateData.chatId(), "Не удалось обработать команду");
             }
         }
     }

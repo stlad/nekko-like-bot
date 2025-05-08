@@ -11,10 +11,6 @@ import ru.vaganov.nekkolike.bot.commands.MessageCommandMapper;
 import ru.vaganov.nekkolike.bot.service.CommandExecutor;
 import ru.vaganov.nekkolike.bot.utils.SendObjectWrapper;
 import ru.vaganov.nekkolike.bot.utils.TelegramBotUtils;
-import ru.vaganov.nekkolike.business.process.NekkoProcessState;
-import ru.vaganov.nekkolike.processengine.ProcessEngine;
-
-import java.util.HashMap;
 
 @Component
 @RequiredArgsConstructor
@@ -30,16 +26,11 @@ public class NekkoBot extends TelegramLongPollingBot {
 
     private final CommandExecutor commandExecutor;
     private final MessageCommandMapper messageCommandMapper;
-    private final ProcessEngine processEngine;
 
     private void processUpdate(Update update) {
-//        var command = messageCommandMapper.extractCommand(update);
+        var command = messageCommandMapper.extractCommand(update);
         var updateData = TelegramBotUtils.createUpdateData(update);
-//        commandExecutor.executeCommand(command, updateData, this);
-        var processInstane = processEngine.getProcessInstance(updateData.chatId())
-                .orElse(processEngine.initProcess(updateData.chatId(), NekkoProcessState.START));
-
-        processEngine.runCurrentState(updateData.chatId(), new HashMap<>());
+        commandExecutor.executeCommand(command, updateData, this);
     }
 
     @Override

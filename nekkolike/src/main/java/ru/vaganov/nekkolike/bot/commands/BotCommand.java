@@ -10,12 +10,8 @@ import java.util.Arrays;
 public enum BotCommand {
 
     START("start"),
-    USERNAME_RECEIVED(null),
     MOVE_TO_MAIN_MENU("main_menu"),
-    SAVE_PHOTO(null),
-    GET_PHOTO("photo"),
-    GET_PHOTO_NEXT("photo_next"),
-    GET_PHOTO_PREV("photo_prev"),
+    USER_MESSAGE(null),
     NONE(null);
 
     private final String callbackPrefix;

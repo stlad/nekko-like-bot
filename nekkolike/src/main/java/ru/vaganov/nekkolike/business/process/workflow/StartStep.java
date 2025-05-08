@@ -3,7 +3,9 @@ package ru.vaganov.nekkolike.business.process.workflow;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import ru.vaganov.nekkolike.bot.utils.SendObjectWrapper;
 import ru.vaganov.nekkolike.business.process.NekkoProcessState;
+import ru.vaganov.nekkolike.processengine.io.OutputMessageProvider;
 import ru.vaganov.nekkolike.processengine.state.NextStateRequest;
 import ru.vaganov.nekkolike.processengine.instance.ProcessInstance;
 
@@ -15,9 +17,10 @@ import java.util.Map;
 public class StartStep implements NekkoProcessStep {
 
     @Override
-    public NextStateRequest execute(ProcessInstance processInstance, Map<String, Object> args) {
+    public NextStateRequest execute(ProcessInstance processInstance,
+                                    OutputMessageProvider<?> out,
+                                    Map<String, Object> args) {
         log.info("Запущен процесс для чата {}", processInstance.getId());
-
         return new NextStateRequest(NekkoProcessState.WAIT_FOR_USERNAME, true);
     }
 

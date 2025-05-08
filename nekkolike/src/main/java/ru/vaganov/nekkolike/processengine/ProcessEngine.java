@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import ru.vaganov.nekkolike.processengine.exceptions.ProcessNotExistsException;
 import ru.vaganov.nekkolike.processengine.instance.ProcessInstance;
 import ru.vaganov.nekkolike.processengine.instance.ProcessInstanceRepository;
+import ru.vaganov.nekkolike.processengine.io.OutputMessageProvider;
 import ru.vaganov.nekkolike.processengine.state.ProcessState;
 import ru.vaganov.nekkolike.processengine.state.ProcessStep;
 
@@ -33,14 +34,14 @@ public class ProcessEngine {
         processSteps.put(state, step);
     }
 
-    public void runCurrentState(Long processId, Map<String, Object> args) {
+    public void runCurrentState(Long processId, OutputMessageProvider out, Map<String, Object> args) {
         var instance = getProcessInstance(processId).orElseThrow(() -> new ProcessNotExistsException("Нет процесса с id: " + processId));
         log.info("Исполнение процесса {} для текущего состояния {}", processId, instance.getCurrentState());
-        var result = processSteps.get(instance.getCurrentState()).execute(instance, args);
+        var result = processSteps.get(instance.getCurrentState()).execute(instance, out, args);
         if (result.waitForInput()) {
             waitInState(instance, result.nextState());
         } else {
-            runCurrentState(processId, null);
+            runCurrentState(processId, out, null);
         }
     }
 
