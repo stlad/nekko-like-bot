@@ -30,5 +30,4 @@ public class ProcessContext {
         }
         return stateType.isInstance(process.getState());
     }
-
 }
