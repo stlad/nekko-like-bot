@@ -3,11 +3,10 @@ package ru.vaganov.nekkolike.business.process.workflow;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import ru.vaganov.nekkolike.bot.utils.SendObjectWrapper;
 import ru.vaganov.nekkolike.business.process.NekkoProcessState;
+import ru.vaganov.nekkolike.processengine.instance.ProcessInstance;
 import ru.vaganov.nekkolike.processengine.io.OutputMessageProvider;
 import ru.vaganov.nekkolike.processengine.state.NextStateRequest;
-import ru.vaganov.nekkolike.processengine.instance.ProcessInstance;
 
 import java.util.Map;
 
