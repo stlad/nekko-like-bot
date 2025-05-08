@@ -6,7 +6,7 @@ import java.util.Map;
 
 public interface ProcessStep {
 
-    default void execute(ProcessInstance processInstance, Map<String, Object> args) {
+    default NextStateRequest execute(ProcessInstance processInstance, Map<String, Object> args) {
         throw new ExecutionNotAllowedException("Данный метод требует входных параметров");
     }
 

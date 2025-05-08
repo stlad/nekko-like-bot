@@ -16,6 +16,11 @@ public class ProcessInstance {
         executionState = ProcessExecutionState.NEW;
     }
 
+    public void waitIn(ProcessState newState){
+        currentState = newState;
+        executionState = ProcessExecutionState.WAIT_INPUT;
+    }
+
     public ProcessInstance(Long id, ProcessState initState){
         this.id = id;
         newState(initState);

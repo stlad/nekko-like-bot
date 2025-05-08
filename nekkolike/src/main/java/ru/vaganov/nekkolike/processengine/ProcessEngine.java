@@ -3,6 +3,7 @@ package ru.vaganov.nekkolike.processengine;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import ru.vaganov.nekkolike.processengine.exceptions.ProcessNotExistsException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +17,8 @@ public class ProcessEngine {
 
 
     private ProcessInstance getProcessInstance(Long processId) {
-        return processInstanceRepository.findById(processId).orElseThrow();
+        return processInstanceRepository.findById(processId)
+                .orElseThrow(() -> new ProcessNotExistsException("Процесс с id: " + processId + " не существует"));
     }
 
     public void registerStep(ProcessState state, ProcessStep step) {
@@ -26,16 +28,24 @@ public class ProcessEngine {
         processSteps.put(state, step);
     }
 
-    public void runCurrentState(Long processId, Map<String, Object> args) {
-        var instance = getProcessInstance(processId);
-        processSteps.get(instance.getCurrentState()).execute(instance, args);
+    public void continueProcess(Long processId) {
+
     }
 
-    public void setAndRunState(Long processId, ProcessState initState, Map<String, Object> args) {
+    public void runCurrentState(Long processId, Map<String, Object> args) {
         var instance = getProcessInstance(processId);
-        instance.newState(initState);
-        processSteps.get(instance.getCurrentState()).execute(instance, args);
+        var result = processSteps.get(instance.getCurrentState()).execute(instance, args);
+        if (result.waitForInput()) {
+            waitInState(instance, result.nextState());
+        } else {
+            runCurrentState(processId, null);
+        }
     }
+
+    private void waitInState(ProcessInstance processInstance, ProcessState newState) {
+        processInstance.waitIn(newState);
+    }
+
 
     public ProcessInstance initProcess(Long newProcessId, ProcessState initState) {
         var processInstanceOpt = processInstanceRepository.findById(newProcessId);

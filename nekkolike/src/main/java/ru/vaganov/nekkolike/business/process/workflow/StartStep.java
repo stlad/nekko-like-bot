@@ -3,6 +3,7 @@ package ru.vaganov.nekkolike.business.process.workflow;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.vaganov.nekkolike.business.process.NekkoProcessState;
+import ru.vaganov.nekkolike.processengine.NextStateRequest;
 import ru.vaganov.nekkolike.processengine.ProcessInstance;
 
 import java.util.Map;
@@ -12,7 +13,9 @@ import java.util.Map;
 public class StartStep implements NekkoProcessStep<Object> {
 
     @Override
-    public void execute(ProcessInstance processInstance, Map<String, Object> args) {
+    public NextStateRequest execute(ProcessInstance processInstance, Map<String, Object> args) {
+
+        return new NextStateRequest(NekkoProcessState.WAIT_FOR_USERNAME, true);
     }
 
     @Override
