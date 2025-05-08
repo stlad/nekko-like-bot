@@ -1,6 +1,8 @@
-package ru.vaganov.nekkolike.processengine;
+package ru.vaganov.nekkolike.processengine.instance;
 
 import lombok.*;
+import ru.vaganov.nekkolike.processengine.state.ProcessExecutionState;
+import ru.vaganov.nekkolike.processengine.state.ProcessState;
 
 @Getter
 public class ProcessInstance {

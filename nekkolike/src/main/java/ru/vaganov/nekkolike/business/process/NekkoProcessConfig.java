@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.vaganov.nekkolike.business.process.workflow.NekkoProcessStep;
 import ru.vaganov.nekkolike.processengine.ProcessEngine;
-import ru.vaganov.nekkolike.processengine.ProcessInstanceRepository;
+import ru.vaganov.nekkolike.processengine.instance.ProcessInstanceRepository;
 
 import java.util.List;
 

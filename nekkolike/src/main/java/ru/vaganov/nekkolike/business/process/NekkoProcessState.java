@@ -1,6 +1,6 @@
 package ru.vaganov.nekkolike.business.process;
 
-import ru.vaganov.nekkolike.processengine.ProcessState;
+import ru.vaganov.nekkolike.processengine.state.ProcessState;
 
 public enum NekkoProcessState implements ProcessState {
     START,

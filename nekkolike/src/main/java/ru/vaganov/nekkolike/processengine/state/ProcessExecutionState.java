@@ -1,4 +1,4 @@
-package ru.vaganov.nekkolike.processengine;
+package ru.vaganov.nekkolike.processengine.state;
 
 public enum ProcessExecutionState {
     NEW,

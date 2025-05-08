@@ -1,5 +1,6 @@
-package ru.vaganov.nekkolike.processengine;
+package ru.vaganov.nekkolike.processengine.state;
 
+import ru.vaganov.nekkolike.processengine.instance.ProcessInstance;
 import ru.vaganov.nekkolike.processengine.exceptions.ExecutionNotAllowedException;
 
 import java.util.Map;

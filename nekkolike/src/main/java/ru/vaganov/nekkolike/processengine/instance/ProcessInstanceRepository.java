@@ -1,4 +1,4 @@
-package ru.vaganov.nekkolike.processengine;
+package ru.vaganov.nekkolike.processengine.instance;
 
 import org.springframework.stereotype.Component;
 
