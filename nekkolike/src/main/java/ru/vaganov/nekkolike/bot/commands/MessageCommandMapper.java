@@ -12,6 +12,12 @@ public class MessageCommandMapper {
         if (update.getCallbackQuery() != null) {
             return BotCommand.fromString(getParamFromCallback(update));
         }
+
+        if (update.getMessage() != null) {
+            if (update.getMessage().getText() != null && update.getMessage().getText() != null) {
+                return BotCommand.fromString(getParamFromMessage(update));
+            }
+        }
         return BotCommand.USER_MESSAGE;
     }
 
@@ -51,5 +57,9 @@ public class MessageCommandMapper {
 
     private String getParamFromCallback(Update update) {
         return update.getCallbackQuery().getData();
+    }
+
+    private String getParamFromMessage(Update update) {
+        return update.getMessage().getText();
     }
 }

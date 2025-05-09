@@ -1,29 +1,36 @@
 package ru.vaganov.nekkolike.business.process.workflow;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import ru.vaganov.nekkolike.bot.NekkoBot;
+import ru.vaganov.nekkolike.bot.response.MessageBuilder;
+import ru.vaganov.nekkolike.bot.utils.UpdateData;
 import ru.vaganov.nekkolike.business.process.NekkoProcessState;
-import ru.vaganov.nekkolike.business.process.io.OutputMessageSender;
+import ru.vaganov.nekkolike.business.process.utils.NekkoBotProcessUtils;
+import ru.vaganov.nekkolike.processengine.context.ProcessContext;
 import ru.vaganov.nekkolike.processengine.instance.ProcessInstance;
 import ru.vaganov.nekkolike.processengine.state.NextStateRequest;
-
-import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class StartStep implements NekkoProcessStep {
 
-    private final OutputMessageSender out;
+    private final NekkoBot nekkoBot;
+    private final ProcessContext processContext;
+    private final ObjectMapper objectMapper;
 
     @Override
-    public NextStateRequest execute(ProcessInstance processInstance,
-                                    Map<String, Object> args) {
+    public void execute(ProcessInstance processInstance) {
         log.info("Запущен процесс для чата {}", processInstance.getId());
-        var chatId = (Long) args.get("chatId");
-        out.askForName(chatId);
-        return new NextStateRequest(NekkoProcessState.WAIT_FOR_USERNAME, true);
+        var data = NekkoBotProcessUtils.mapArguments(processInstance.getArgs(), objectMapper, UpdateData.class);
+//        return new NextStateRequest(NekkoProcessState.WAIT_FOR_USERNAME, true);
+        nekkoBot.send(MessageBuilder.askForName(data.chatId()));
+        processContext.waitNextState(processInstance.getId(), NekkoProcessState.WAIT_FOR_USERNAME, null);
     }
 
     @Override

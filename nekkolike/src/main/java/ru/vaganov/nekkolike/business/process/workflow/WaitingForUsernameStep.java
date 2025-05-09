@@ -1,24 +1,23 @@
 package ru.vaganov.nekkolike.business.process.workflow;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import ru.vaganov.nekkolike.bot.NekkoBot;
 import ru.vaganov.nekkolike.business.process.NekkoProcessState;
 import ru.vaganov.nekkolike.processengine.instance.ProcessInstance;
-import ru.vaganov.nekkolike.processengine.state.NextStateRequest;
 import ru.vaganov.nekkolike.processengine.state.ProcessState;
-
-import java.util.Map;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class WaitingForUsernameStep implements NekkoProcessStep {
+    private final NekkoBot bot;
 
-    public NextStateRequest execute(ProcessInstance processInstance,
-                                    Map<String, Object> args) {
+    public void execute(ProcessInstance processInstance) {
         log.info("Запущен шаг {} для чата {}", getState(), processInstance.getId());
 
-        log.info("Привет, {}", args.get("message"));
-        return new NextStateRequest(NekkoProcessState.START, true);
+
     }
 
     @Override

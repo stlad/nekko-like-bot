@@ -13,18 +13,21 @@ public class ProcessInstance {
 
     private ProcessExecutionState executionState;
 
-    public void newState(ProcessState newState) {
+    private String args;
+
+    public void newState(ProcessState newState, String args) {
         currentState = newState;
         executionState = ProcessExecutionState.NEW;
+        this.args = args;
     }
 
-    public void waitIn(ProcessState newState){
+    public void waitIn(ProcessState newState) {
         currentState = newState;
         executionState = ProcessExecutionState.WAIT_INPUT;
     }
 
-    public ProcessInstance(Long id, ProcessState initState){
+    public ProcessInstance(Long id, ProcessState initState, String args) {
         this.id = id;
-        newState(initState);
+        newState(initState,args);
     }
 }

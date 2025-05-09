@@ -9,11 +9,12 @@ import ru.vaganov.nekkolike.bot.utils.SendObjectWrapper;
 import ru.vaganov.nekkolike.bot.utils.UpdateData;
 import ru.vaganov.nekkolike.business.process.NekkoProcessState;
 import ru.vaganov.nekkolike.processengine.ProcessEngine;
+import ru.vaganov.nekkolike.processengine.context.ProcessContext;
 
 @Component
 @RequiredArgsConstructor
 public class CommandExecutor {
-    private final ProcessEngine processEngine;
+    private final ProcessContext processContext;
 
     public SendObjectWrapper executeCommand(BotCommand command, UpdateData updateData) {
         try {
@@ -26,11 +27,7 @@ public class CommandExecutor {
     private SendObjectWrapper chooseExecution(BotCommand command, UpdateData updateData) {
         switch (command) {
             case START -> {
-                if (processEngine.getProcessInstance(updateData.chatId()).isEmpty()) {
-                    processEngine.initProcess(updateData.chatId(), NekkoProcessState.START);
-                }
-
-                processEngine.runCurrentState(updateData.chatId(), updateData.toArgs());
+                processContext.runNextState(updateData.chatId(), NekkoProcessState.START, updateData.toArgs());
                 return MessageBuilder.askForName(updateData.chatId());
             }
             default -> {
