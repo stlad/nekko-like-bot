@@ -23,7 +23,9 @@ public class WaitingForUsernameStep implements NekkoProcessStep {
         log.info("Запущен шаг {} для чата {}", getState(), processInstance.getId());
         var data = NekkoBotProcessUtils.mapArguments(processInstance.getArgs(), mapper, UpdateData.class);
         var username = data.messageText();
+
         bot.send(MessageBuilder.greetingsText(data.chatId(), username));
+        bot.send(MessageBuilder.mainMenu(data.chatId()));
 
         processInstance.complete(NekkoProcessState.COMPLETE);
     }

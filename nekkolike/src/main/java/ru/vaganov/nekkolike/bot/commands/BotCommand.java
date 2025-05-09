@@ -11,6 +11,9 @@ public enum BotCommand {
 
     START("start"),
     MOVE_TO_MAIN_MENU("main_menu"),
+    SHOW_CATS("show_cats"),
+    MY_CATS("my_cats"),
+    ADD_CAT("add_cat"),
     USER_MESSAGE(null),
     NONE(null);
 

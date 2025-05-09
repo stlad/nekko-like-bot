@@ -7,7 +7,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum MessageTemplate {
     MAIN_MENU("Главное меню"),
-    SHOW_MY_PHOTOS("Посмотреть мои картинки"),
+    MY_CATS("Мои котики"),
+    SHOW_CATS("Смотреть котиков"),
+    ADD_CAT("Добавить котика"),
     NEXT("Далее"),
     PREV("Назад"),
     ASK_NAME("Как к Вам обращаться?"),
