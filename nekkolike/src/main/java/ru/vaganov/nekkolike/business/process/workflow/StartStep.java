@@ -28,7 +28,6 @@ public class StartStep implements NekkoProcessStep {
     public void execute(ProcessInstance processInstance) {
         log.info("Запущен процесс для чата {}", processInstance.getId());
         var data = NekkoBotProcessUtils.mapArguments(processInstance.getArgs(), objectMapper, UpdateData.class);
-//        return new NextStateRequest(NekkoProcessState.WAIT_FOR_USERNAME, true);
         nekkoBot.send(MessageBuilder.askForName(data.chatId()));
         processContext.waitNextState(processInstance.getId(), NekkoProcessState.WAIT_FOR_USERNAME, null);
     }

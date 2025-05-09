@@ -4,5 +4,6 @@ import ru.vaganov.nekkolike.processengine.state.ProcessState;
 
 public enum NekkoProcessState implements ProcessState {
     START,
-    WAIT_FOR_USERNAME
+    WAIT_FOR_USERNAME,
+    COMPLETE
 }

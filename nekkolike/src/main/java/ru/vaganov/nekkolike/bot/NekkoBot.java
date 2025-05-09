@@ -30,7 +30,7 @@ public class NekkoBot extends TelegramLongPollingBot {
     private void processUpdate(Update update) {
         var command = messageCommandMapper.extractCommand(update);
         var updateData = TelegramBotUtils.createUpdateData(update);
-        commandExecutor.executeCommand(command, updateData);
+        commandExecutor.executeCommand(command, updateData, this);
     }
 
     @Override

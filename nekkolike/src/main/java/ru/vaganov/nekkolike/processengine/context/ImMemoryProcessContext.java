@@ -34,8 +34,8 @@ public class ImMemoryProcessContext implements ProcessContext {
             return;
         }
         try {
-
             instance.get().newState(nextState, objectMapper.writeValueAsString(args));
+            log.info("Процесса с id: {} Переведен в состояние {}", processId, nextState);
         } catch (JsonProcessingException exception) {
             log.error("Не удлалось обработать аргументы для процесса");
         }
@@ -47,11 +47,24 @@ public class ImMemoryProcessContext implements ProcessContext {
                 .orElseThrow(() -> new ProcessNotExistsException("Нет процесса с id: " + processId));
         instance.waitIn(nextState);
         processInstanceRepository.save(instance);
+        log.info("Процесса с id: {} Переведен в состояние {}  ожидает в нем", processId, nextState);
     }
 
     @Override
     public void continueCurrentState(Long processId, Map<String, Object> args) {
+        var instance = getProcessInstance(processId)
+                .orElseThrow(() -> new ProcessNotExistsException("Нет процесса с id: " + processId));
+        String strArgs;
+        try {
+            strArgs = objectMapper.writeValueAsString(args);
+        } catch (JsonProcessingException e) {
+            log.error("Не удлалось обработать аргументы для процесса");
+            throw new RuntimeException(e);
+        }
 
+        instance.newState(instance.getCurrentState(), strArgs);
+        processInstanceRepository.save(instance);
+        log.info("Процесса с id: {} готов продолжить исполнение состояния {}", processId, instance.getCurrentState());
     }
 
     @Override

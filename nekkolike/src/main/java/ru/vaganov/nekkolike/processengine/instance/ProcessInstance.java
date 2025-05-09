@@ -26,6 +26,11 @@ public class ProcessInstance {
         executionState = ProcessExecutionState.WAIT_INPUT;
     }
 
+    public void complete(ProcessState newState) {
+        currentState = newState;
+        executionState = ProcessExecutionState.COMPLETED;
+    }
+
     public ProcessInstance(Long id, ProcessState initState, String args) {
         this.id = id;
         newState(initState,args);

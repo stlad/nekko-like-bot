@@ -31,10 +31,9 @@ public class ProcessEngine {
 
     @Scheduled(fixedRate = 1000)
     public void run() {
-        log.info("asdasdasd");
         var instanceOpt = processInstanceRepository.findAnyProcessToRun();
         if(instanceOpt.isEmpty()){
-            log.debug("Не нашлось процессов, готовых к исполнению");
+            log.info("Не нашлось процессов, готовых к исполнению");
             return;
         }
         var instance = instanceOpt.get();
