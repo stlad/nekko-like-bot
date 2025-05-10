@@ -25,12 +25,12 @@ public class NekkoBot extends TelegramLongPollingBot {
     private String token;
 
     private final CommandExecutor commandExecutor;
+    private final MessageCommandMapper messageCommandMapper;
 
     private void processUpdate(Update update) {
-        var command = MessageCommandMapper.extractCommand(update);
-        var updateData = TelegramBotUtils.updateData(update);
-        var response = commandExecutor.executeCommand(command, updateData, this);
-        this.send(response);
+        var command = messageCommandMapper.extractCommand(update);
+        var updateData = TelegramBotUtils.createUpdateData(update);
+        commandExecutor.executeCommand(command, updateData, this);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class NekkoBot extends TelegramLongPollingBot {
         processUpdate(update);
     }
 
-    private void send(SendObjectWrapper wrapper) {
+    public void send(SendObjectWrapper wrapper) {
         try {
             if (wrapper.getSendMessage() != null) {
                 this.execute(wrapper.getSendMessage());

@@ -9,18 +9,20 @@ import java.util.Arrays;
 @AllArgsConstructor
 public enum BotCommand {
 
+    START("start"),
     MOVE_TO_MAIN_MENU("main_menu"),
-    SAVE_PHOTO(null),
-    GET_PHOTO("photo"),
-    GET_PHOTO_NEXT("photo_next"),
-    GET_PHOTO_PREV("photo_prev"),
+    SHOW_CATS("show_cats"),
+    MY_CATS("my_cats"),
+    ADD_CAT("add_cat"),
+    USER_MESSAGE(null),
     NONE(null);
 
     private final String callbackPrefix;
 
     public static BotCommand fromString(String str) {
+        var formattedCommand = str.replace("/", "");
         return Arrays.stream(BotCommand.values())
                 .filter(cmd -> cmd.getCallbackPrefix() != null)
-                .filter(cmd -> cmd.callbackPrefix.startsWith(str)).findAny().orElse(NONE);
+                .filter(cmd -> cmd.callbackPrefix.startsWith(formattedCommand)).findAny().orElse(NONE);
     }
 }
