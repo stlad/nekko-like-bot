@@ -1,7 +1,5 @@
 package ru.vaganov.nekkolike.processengine.instance;
 
-import org.springframework.stereotype.Component;
-
 import java.util.Optional;
 
 public interface ProcessInstanceRepository {

@@ -1,6 +1,6 @@
 package ru.vaganov.nekkolike.processengine.instance;
 
-import lombok.*;
+import lombok.Getter;
 import ru.vaganov.nekkolike.processengine.state.ProcessExecutionState;
 import ru.vaganov.nekkolike.processengine.state.ProcessState;
 

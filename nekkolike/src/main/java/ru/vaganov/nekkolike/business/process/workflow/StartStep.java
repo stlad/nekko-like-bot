@@ -1,7 +1,5 @@
 package ru.vaganov.nekkolike.business.process.workflow;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +11,6 @@ import ru.vaganov.nekkolike.business.process.NekkoProcessState;
 import ru.vaganov.nekkolike.business.process.utils.NekkoBotProcessUtils;
 import ru.vaganov.nekkolike.processengine.context.ProcessContext;
 import ru.vaganov.nekkolike.processengine.instance.ProcessInstance;
-import ru.vaganov.nekkolike.processengine.state.NextStateRequest;
 
 @Component
 @RequiredArgsConstructor
