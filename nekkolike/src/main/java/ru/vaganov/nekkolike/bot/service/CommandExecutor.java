@@ -31,6 +31,9 @@ public class CommandExecutor {
 
     private void chooseExecution(BotCommand command, UpdateData updateData, NekkoBot bot) {
         switch (command) {
+            case MOVE_TO_MAIN_MENU -> {
+                bot.send(MessageBuilder.mainMenu(updateData.chatId()));
+            }
             case START -> {
                 registrationFlow.joined(updateData.chatId(), bot);
             }
