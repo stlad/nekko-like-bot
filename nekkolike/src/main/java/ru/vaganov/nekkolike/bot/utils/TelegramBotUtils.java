@@ -15,8 +15,17 @@ public class TelegramBotUtils {
         }
     }
 
+    public static String extractTelegramUserName(Update update) {
+        if (update.getMessage() != null) {
+            return update.getMessage().getFrom().getUserName();
+        } else {
+            return update.getCallbackQuery().getMessage().getFrom().getUserName();
+        }
+    }
+
     public static UpdateData createUpdateData(Update update) {
         var chatId = extractChatId(update);
+        var userName = extractTelegramUserName(update);
         PhotoSize photo = null;
         if (update.getMessage() != null && update.getMessage().getPhoto() != null) {
             photo = update.getMessage().getPhoto()
@@ -25,6 +34,6 @@ public class TelegramBotUtils {
         }
         String messageText = update.getMessage() == null ? null : update.getMessage().getText();
 
-        return new UpdateData(chatId, photo, messageText);
+        return new UpdateData(chatId, userName, photo, messageText);
     }
 }

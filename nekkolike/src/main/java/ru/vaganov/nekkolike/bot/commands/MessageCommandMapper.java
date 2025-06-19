@@ -9,9 +9,12 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class MessageCommandMapper {
 
     public BotCommand extractCommand(Update update) {
-        if (update.getMessage() != null
-                && update.getMessage().getText() != null) {
-            if (update.getMessage().getText().startsWith("/")) {
+        if (update.getMessage() == null
+                && update.getCallbackQuery() != null) {
+            return BotCommand.fromString(getParamFromCallback(update));
+        }
+        if (update.getMessage() != null) {
+            if (update.getMessage().getText() != null && update.getMessage().getText().startsWith("/")) {
                 return BotCommand.fromString(getParamFromMessage(update));
             } else {
                 return BotCommand.USER_MESSAGE;

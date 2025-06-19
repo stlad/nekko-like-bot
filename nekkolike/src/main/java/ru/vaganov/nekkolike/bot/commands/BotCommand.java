@@ -14,6 +14,7 @@ public enum BotCommand {
     SHOW_CATS("show_cats"),
     MY_CATS("my_cats"),
     ADD_CAT("add_cat"),
+    ADD_CAT_ACCEPT("add_cat_accept"),
     USER_MESSAGE(null),
     NONE(null);
 

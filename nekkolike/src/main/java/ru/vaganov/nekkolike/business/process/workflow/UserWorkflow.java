@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import ru.vaganov.nekkolike.business.process.workflow.dto.CatRegistrationDto;
 import ru.vaganov.nekkolike.business.process.workflow.dto.UserRegistrationDto;
 
 @Getter
@@ -15,6 +16,7 @@ public class UserWorkflow {
     private WorkflowStep currentStep;
 
     private UserRegistrationDto userRegistrationDto;
+    private CatRegistrationDto catRegistrationDto;
 
     public UserWorkflow(Long chatId) {
         this.chatId = chatId;
@@ -22,5 +24,9 @@ public class UserWorkflow {
 
     public void initRegistration(){
         userRegistrationDto = new UserRegistrationDto(chatId);
+    }
+
+    public void initCat(){
+        catRegistrationDto = new CatRegistrationDto(chatId);
     }
 }

@@ -3,5 +3,11 @@ package ru.vaganov.nekkolike.business.process.workflow;
 public enum WorkflowStep {
     JOIN_STARTED,
     JOIN_WAIT_FOR_NAME,
-    JOIN_COMPLETED;
+    JOIN_COMPLETED,
+
+    ADD_CAT_STARTED,
+    ADD_CAT_WAIT_FOR_PHOTO,
+    ADD_CAT_WAIT_FOR_NAME,
+    ADD_CAT_WAIT_FOR_ACCEPT,
+    ADD_CAT_COMPLETED,
 }
