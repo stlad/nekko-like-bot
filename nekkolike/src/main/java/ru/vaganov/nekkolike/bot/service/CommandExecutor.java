@@ -4,21 +4,24 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.vaganov.nekkolike.bot.NekkoBot;
 import ru.vaganov.nekkolike.bot.commands.BotCommand;
+import ru.vaganov.nekkolike.bot.exceptions.CommandNotFoundException;
+import ru.vaganov.nekkolike.bot.exceptions.CommandProcessingFailedException;
 import ru.vaganov.nekkolike.bot.exceptions.FileProcessingException;
 import ru.vaganov.nekkolike.bot.response.MessageBuilder;
 import ru.vaganov.nekkolike.bot.utils.UpdateData;
-import ru.vaganov.nekkolike.business.process.NekkoProcessState;
-import ru.vaganov.nekkolike.processengine.context.ProcessContext;
+import ru.vaganov.nekkolike.business.process.workflow.service.RegistrationFlow;
+import ru.vaganov.nekkolike.business.process.workflow.repository.WorkflowRepository;
 
 @Component
 @RequiredArgsConstructor
 public class CommandExecutor {
-    private final ProcessContext processContext;
+    private final WorkflowRepository workflowRepository;
+    private final RegistrationFlow registrationFlow;
 
     public void executeCommand(BotCommand command, UpdateData updateData, NekkoBot bot) {
         try {
             chooseExecution(command, updateData, bot);
-        } catch (FileProcessingException exception) {
+        } catch (FileProcessingException | CommandNotFoundException exception) {
             bot.send(MessageBuilder.errorResponse(updateData.chatId(), exception.getMessage()));
         }
     }
@@ -26,14 +29,27 @@ public class CommandExecutor {
     private void chooseExecution(BotCommand command, UpdateData updateData, NekkoBot bot) {
         switch (command) {
             case START -> {
-                processContext.runNextState(updateData.chatId(), NekkoProcessState.START, updateData.toArgs());
+                registrationFlow.joined(updateData.chatId(), bot);
             }
             case USER_MESSAGE -> {
-                processContext.continueCurrentState(updateData.chatId(), updateData.toArgs());
+                chooseStepUserMessage(updateData, bot);
             }
             default -> {
-                bot.send(MessageBuilder.errorResponse(updateData.chatId(), "Не удалось обработать команду"));
+                throw new CommandProcessingFailedException();
             }
         }
+    }
+
+    private void chooseStepUserMessage(UpdateData updateData, NekkoBot bot) {
+        var step = workflowRepository.findCurrentStepByChatId(updateData.chatId()).orElseThrow();
+        switch (step) {
+            case JOIN_WAIT_FOR_NAME -> {
+                registrationFlow.waitForUsername(updateData.chatId(), updateData.messageText(), bot);
+            }
+            default -> {
+                throw new CommandProcessingFailedException();
+            }
+        }
+
     }
 }
