@@ -7,10 +7,11 @@ import ru.vaganov.nekkolike.bot.commands.BotCommand;
 import ru.vaganov.nekkolike.bot.exceptions.CommandNotFoundException;
 import ru.vaganov.nekkolike.bot.exceptions.CommandProcessingFailedException;
 import ru.vaganov.nekkolike.bot.exceptions.FileProcessingException;
+import ru.vaganov.nekkolike.bot.exceptions.WorkflowNotFoundException;
 import ru.vaganov.nekkolike.bot.response.MessageBuilder;
 import ru.vaganov.nekkolike.bot.utils.UpdateData;
-import ru.vaganov.nekkolike.business.process.workflow.service.RegistrationFlow;
 import ru.vaganov.nekkolike.business.process.workflow.repository.WorkflowRepository;
+import ru.vaganov.nekkolike.business.process.workflow.service.RegistrationFlow;
 
 @Component
 @RequiredArgsConstructor
@@ -21,7 +22,7 @@ public class CommandExecutor {
     public void executeCommand(BotCommand command, UpdateData updateData, NekkoBot bot) {
         try {
             chooseExecution(command, updateData, bot);
-        } catch (FileProcessingException | CommandNotFoundException exception) {
+        } catch (FileProcessingException | CommandNotFoundException | WorkflowNotFoundException exception) {
             bot.send(MessageBuilder.errorResponse(updateData.chatId(), exception.getMessage()));
         }
     }
@@ -41,7 +42,9 @@ public class CommandExecutor {
     }
 
     private void chooseStepUserMessage(UpdateData updateData, NekkoBot bot) {
-        var step = workflowRepository.findCurrentStepByChatId(updateData.chatId()).orElseThrow();
+        var step = workflowRepository.findCurrentStepByChatId(updateData.chatId())
+                .orElseThrow(() -> new WorkflowNotFoundException(updateData.chatId()));
+
         switch (step) {
             case JOIN_WAIT_FOR_NAME -> {
                 registrationFlow.waitForUsername(updateData.chatId(), updateData.messageText(), bot);
