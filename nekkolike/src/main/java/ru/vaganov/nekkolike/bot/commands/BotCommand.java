@@ -21,7 +21,7 @@ public enum BotCommand {
     private final String callbackPrefix;
 
     public static BotCommand fromString(String str) {
-        var formattedCommand = str.replace("/", "");
+        var formattedCommand = str.split("/")[0];
         return Arrays.stream(BotCommand.values())
                 .filter(cmd -> cmd.getCallbackPrefix() != null)
                 .filter(cmd -> cmd.callbackPrefix.startsWith(formattedCommand)).findAny().orElse(NONE);

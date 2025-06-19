@@ -1,11 +1,11 @@
 package ru.vaganov.nekkolike.business.process.workflow;
 
-import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import ru.vaganov.nekkolike.business.process.workflow.dto.CatRegistrationDto;
 import ru.vaganov.nekkolike.business.process.workflow.dto.UserRegistrationDto;
+
+import java.util.UUID;
 
 @Getter
 public class UserWorkflow {
@@ -22,11 +22,11 @@ public class UserWorkflow {
         this.chatId = chatId;
     }
 
-    public void initRegistration(){
+    public void initRegistration() {
         userRegistrationDto = new UserRegistrationDto(chatId);
     }
 
-    public void initCat(){
-        catRegistrationDto = new CatRegistrationDto(chatId);
+    public void initCat(UUID catId) {
+        catRegistrationDto = new CatRegistrationDto(chatId, catId);
     }
 }

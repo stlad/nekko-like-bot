@@ -14,17 +14,24 @@ import ru.vaganov.nekkolike.bot.utils.SendObjectWrapper;
 
 import java.io.File;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Component
 public class MessageBuilder {
 
     public static SendObjectWrapper errorResponse(Long chatId, String message) {
+        var menu = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.MAIN_MENU));
+        menu.setCallbackData(BotCommand.MOVE_TO_MAIN_MENU.getCallbackPrefix());
+
+        var menuRow = List.of(menu);
+        var rows = List.of(menuRow);
 
         return new SendObjectWrapper(
                 SendMessage.builder()
                         .text(message)
                         .chatId(chatId)
+                        .replyMarkup(new InlineKeyboardMarkup(rows))
                         .build(),
                 chatId
         );
@@ -100,14 +107,14 @@ public class MessageBuilder {
         return simpleTextByTemplate(chatId, MessageTemplate.GREETINGS, username);
     }
 
-    public static SendObjectWrapper catAcceptName(Long chatId, String username, String catName) {
+    public static SendObjectWrapper acceptCatName(Long chatId, String username, String catName, UUID catId) {
         var message = simpleTextByTemplate(chatId, MessageTemplate.ADD_CAT_ACCEPT_TEXT, catName, username);
 
         var menu = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.MAIN_MENU));
         menu.setCallbackData(BotCommand.MOVE_TO_MAIN_MENU.getCallbackPrefix());
 
         var accept = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.ACCEPT));
-        accept.setCallbackData(BotCommand.ADD_CAT_ACCEPT.getCallbackPrefix());
+        accept.setCallbackData(BotCommand.ADD_CAT_ACCEPT.getCallbackPrefix() + "/" + catId.toString());
 
         var starFromBeginning = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.ASK_CAT_START_FROM_BEGINNING));
         starFromBeginning.setCallbackData(BotCommand.ADD_CAT.getCallbackPrefix());
