@@ -17,6 +17,7 @@ public class CatMapper {
         var user = userRepository.findByChatId(dto.getAuthorChatId())
                 .orElseThrow(() -> new EntityNotFoundException("Не найден пользователь с чат-ид" + dto.getAuthorChatId()));
         return Cat.builder()
+                .id(dto.getCatId())
                 .user(user)
                 .catName(dto.getCatName())
                 .build();

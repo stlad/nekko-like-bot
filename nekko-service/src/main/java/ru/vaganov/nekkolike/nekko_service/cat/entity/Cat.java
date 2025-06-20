@@ -17,8 +17,6 @@ import java.util.UUID;
 public class Cat {
 
     @Id
-    @GeneratedValue
-    @UuidGenerator
     private UUID id;
 
     private String photoName;

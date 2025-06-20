@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 import java.io.File;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -20,4 +21,7 @@ public class CatRegistrationDto {
 
     @NotNull(message = "Имя котика не может быть пустым")
     private String catName;
+
+    @NotNull(message = "ID котика не может быть пустым")
+    private UUID catId;
 }

@@ -13,7 +13,7 @@ import ru.vaganov.nekkolike.nekko_service.exception.ContentManagerException;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.UUID;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -27,7 +27,7 @@ public class CatService {
     @Transactional
     public Cat createCat(CatRegistrationDto dto) {
         var cat = catMapper.fromDto(dto);
-        var photoName = dto.getAuthorChatId() + "/" + UUID.randomUUID() + ".jpg";
+        var photoName = dto.getAuthorChatId() + "/" + dto.getCatId() + ".jpg";
         cat.setPhotoName(photoName);
         try {
             contentManager.save(photoName, new FileInputStream(dto.getPhoto()));
@@ -35,5 +35,10 @@ public class CatService {
             throw new ContentManagerException(photoName, e);
         }
         return catRepository.save(cat);
+    }
+
+    @Transactional
+    public List<String> getCatNamesByAuthor(Long chatId) {
+        return catRepository.findCatNamesByChatId(chatId).toList();
     }
 }

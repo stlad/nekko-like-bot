@@ -11,6 +11,7 @@ import ru.vaganov.nekkolike.nekko_service.user.repository.UserRepository;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 
 class CatServiceTest extends BaseContextTest {
 
@@ -29,15 +30,18 @@ class CatServiceTest extends BaseContextTest {
         var file = openFile();
 
         var dto = CatRegistrationDto.builder()
+                .catId(UUID.fromString("7f5333bd-ad68-4e33-95cf-6186ce001ddf"))
                 .authorChatId(user.getChatId())
                 .catName("cat")
                 .photo(file)
                 .build();
 
         var cat = catService.createCat(dto);
-        Assertions.assertTrue(cat.getPhotoName().startsWith("1/"));
-        Assertions.assertNotNull(cat.getId());
+
+        Assertions.assertEquals(dto.getCatId(), cat.getId());
+        Assertions.assertTrue(cat.getPhotoName().equals(String.format("%s/%s.jpg", user.getChatId(), dto.getCatId())));
         Assertions.assertEquals(dto.getCatName(), cat.getCatName());
+
     }
 
     private File openFile() {
