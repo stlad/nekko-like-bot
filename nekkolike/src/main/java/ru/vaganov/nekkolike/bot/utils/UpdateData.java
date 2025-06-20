@@ -1,6 +1,8 @@
 package ru.vaganov.nekkolike.bot.utils;
 
-import org.telegram.telegrambots.meta.api.objects.PhotoSize;
+import java.io.File;
+import java.util.List;
 
-public record UpdateData(Long chatId, PhotoSize photo) {
+public record UpdateData(Long chatId, String telegramUsername, File photo, String messageText, String[] params) {
+
 }

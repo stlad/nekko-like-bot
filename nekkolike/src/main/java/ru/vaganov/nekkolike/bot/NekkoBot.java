@@ -8,13 +8,14 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.vaganov.nekkolike.bot.commands.MessageCommandMapper;
+import ru.vaganov.nekkolike.bot.response.TelegramMessageSender;
 import ru.vaganov.nekkolike.bot.service.CommandExecutor;
 import ru.vaganov.nekkolike.bot.utils.SendObjectWrapper;
 import ru.vaganov.nekkolike.bot.utils.TelegramBotUtils;
 
 @Component
 @RequiredArgsConstructor
-public class NekkoBot extends TelegramLongPollingBot {
+public class NekkoBot extends TelegramLongPollingBot implements TelegramMessageSender {
 
     private final Logger logger = LoggerFactory.getLogger(NekkoBot.class);
 
@@ -25,12 +26,12 @@ public class NekkoBot extends TelegramLongPollingBot {
     private String token;
 
     private final CommandExecutor commandExecutor;
+    private final MessageCommandMapper messageCommandMapper;
 
     private void processUpdate(Update update) {
-        var command = MessageCommandMapper.extractCommand(update);
-        var updateData = TelegramBotUtils.updateData(update);
-        var response = commandExecutor.executeCommand(command, updateData, this);
-        this.send(response);
+        var command = messageCommandMapper.extractCommand(update);
+        var updateData = TelegramBotUtils.createUpdateData(update, this);
+        commandExecutor.executeCommand(command, updateData, this);
     }
 
     @Override
@@ -44,7 +45,8 @@ public class NekkoBot extends TelegramLongPollingBot {
         processUpdate(update);
     }
 
-    private void send(SendObjectWrapper wrapper) {
+    @Override
+    public void send(SendObjectWrapper wrapper) {
         try {
             if (wrapper.getSendMessage() != null) {
                 this.execute(wrapper.getSendMessage());
