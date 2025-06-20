@@ -1,0 +1,20 @@
+server:
+  port : 8090
+
+spring:
+  datasource:
+    url : jdbc:postgresql://localhost:5432/nekko-db
+    username : postgres
+    password : admin
+
+  jpa:
+    generate-ddl : true
+    hibernate :
+      ddl-auto : validate
+    properties:
+      hibernate:
+        dialect : org.hibernate.dialect.PostgreSQLDialect
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    enabled: true
