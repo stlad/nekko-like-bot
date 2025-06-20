@@ -1,0 +1,14 @@
+spring:
+  liquibase:
+    change-log: classpath:db.changelog/db.changelog-test.xml
+    contexts: test
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+
+content-manager:
+  base-path: C:\Projects\nekko-like-bot\nekko-service\data\library\

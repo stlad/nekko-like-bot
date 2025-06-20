@@ -1,0 +1,24 @@
+package ru.vaganov.nekkolike.nekko_service.cat.mapper;
+
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import ru.vaganov.nekkolike.nekko_service.cat.dto.CatRegistrationDto;
+import ru.vaganov.nekkolike.nekko_service.cat.entity.Cat;
+import ru.vaganov.nekkolike.nekko_service.user.repository.UserRepository;
+
+@Component
+@RequiredArgsConstructor
+public class CatMapper {
+
+    private final UserRepository userRepository;
+
+    public Cat fromDto(CatRegistrationDto dto) {
+        var user = userRepository.findByChatId(dto.getAuthorChatId())
+                .orElseThrow(() -> new EntityNotFoundException("Не найден пользователь с чат-ид" + dto.getAuthorChatId()));
+        return Cat.builder()
+                .user(user)
+                .catName(dto.getCatName())
+                .build();
+    }
+}
