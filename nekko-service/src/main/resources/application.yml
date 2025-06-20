@@ -19,17 +19,5 @@ spring:
     change-log: classpath:db/changelog/db.changelog-master.xml
     enabled: true
 
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: admin
-    password: password
-    queue:
-      name: NEKKO_QUEUE
-    exchange:
-      name: nekko-exchange
-    routing:
-      key: nekko.key
-
 content-manager:
   base-path: C:\Projects\nekko-like-bot\nekko-service\data\library\
