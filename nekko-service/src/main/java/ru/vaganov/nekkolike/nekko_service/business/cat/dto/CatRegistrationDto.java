@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
-import java.io.File;
 import java.util.UUID;
 
 @Getter
@@ -17,7 +16,7 @@ public class CatRegistrationDto {
     private Long authorChatId;
 
     @NotNull(message = "Фото котика не может быть пустым")
-    private File photo;
+    private byte[] photo;
 
     @NotNull(message = "Имя котика не может быть пустым")
     private String catName;

@@ -1,4 +1,4 @@
-package ru.vaganov.nekkolike.nekko_service.business.entity;
+package ru.vaganov.nekkolike.nekko_service.business.review.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

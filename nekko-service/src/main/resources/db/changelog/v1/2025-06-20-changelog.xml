@@ -12,6 +12,7 @@
             <column name="username" type="varchar" remarks="Имя пользователя">
                 <constraints nullable="false"/>
             </column>
+            <column name="telegram_username" type="varchar" remarks="Имя пользователя в telegram"/>
             <column name="chat_id" type="bigint" remarks="Ид телеграм чата пользователя">
                 <constraints unique="true"/>
             </column>

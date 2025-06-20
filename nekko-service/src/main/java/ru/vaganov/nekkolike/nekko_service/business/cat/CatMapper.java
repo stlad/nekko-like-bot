@@ -1,11 +1,11 @@
-package ru.vaganov.nekkolike.nekko_service.business.cat.mapper;
+package ru.vaganov.nekkolike.nekko_service.business.cat;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.vaganov.nekkolike.nekko_service.business.cat.dto.CatRegistrationDto;
 import ru.vaganov.nekkolike.nekko_service.business.cat.entity.Cat;
-import ru.vaganov.nekkolike.nekko_service.business.user.repository.UserRepository;
+import ru.vaganov.nekkolike.nekko_service.business.user.UserRepository;
 
 @Component
 @RequiredArgsConstructor

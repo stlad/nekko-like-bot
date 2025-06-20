@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import ru.vaganov.nekkolike.nekko_service.business.cat.dto.CatRegistrationDto;
-import ru.vaganov.nekkolike.nekko_service.business.cat.service.CatService;
+import ru.vaganov.nekkolike.nekko_service.business.cat.CatService;
 import ru.vaganov.nekkolike.nekko_service.config.BaseContextTest;
 import ru.vaganov.nekkolike.nekko_service.business.user.entity.User;
-import ru.vaganov.nekkolike.nekko_service.business.user.repository.UserRepository;
+import ru.vaganov.nekkolike.nekko_service.business.user.UserRepository;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,9 +45,9 @@ class CatServiceTest extends BaseContextTest {
 
     }
 
-    private File openFile() {
+    private byte[] openFile() {
         try {
-            return new ClassPathResource(RESOURCE_FILENAME).getFile();
+            return new ClassPathResource(RESOURCE_FILENAME).getContentAsByteArray();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

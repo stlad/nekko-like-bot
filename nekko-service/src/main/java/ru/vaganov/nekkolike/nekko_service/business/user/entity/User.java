@@ -23,6 +23,8 @@ public class User {
     @UuidGenerator
     private UUID id;
 
+    private String telegramUsername;
+
     private String username;
 
     private Long chatId;

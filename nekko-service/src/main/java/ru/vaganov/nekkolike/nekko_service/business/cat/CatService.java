@@ -1,4 +1,4 @@
-package ru.vaganov.nekkolike.nekko_service.business.cat.service;
+package ru.vaganov.nekkolike.nekko_service.business.cat;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -6,11 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.vaganov.nekkolike.nekko_service.business.cat.dto.CatRegistrationDto;
 import ru.vaganov.nekkolike.nekko_service.business.cat.entity.Cat;
-import ru.vaganov.nekkolike.nekko_service.business.cat.mapper.CatMapper;
-import ru.vaganov.nekkolike.nekko_service.business.cat.repository.CatRepository;
 import ru.vaganov.nekkolike.nekko_service.contentmanager.ContentManager;
 import ru.vaganov.nekkolike.nekko_service.exception.ContentManagerException;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
@@ -30,7 +29,7 @@ public class CatService {
         var photoName = dto.getAuthorChatId() + "/" + dto.getCatId() + ".jpg";
         cat.setPhotoName(photoName);
         try {
-            contentManager.save(photoName, new FileInputStream(dto.getPhoto()));
+            contentManager.save(photoName, new ByteArrayInputStream(dto.getPhoto()));
         } catch (IOException e) {
             throw new ContentManagerException(photoName, e);
         }
