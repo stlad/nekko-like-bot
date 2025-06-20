@@ -2,6 +2,7 @@ package ru.vaganov.nekkolike.nekko_service.controller.rabbitmq;
 
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -16,7 +17,7 @@ public class RabbitMQListener {
     }
 
     @RabbitListener(queues = "${spring.rabbitmq.queue.name}")
-    public void onMessage(String message) {
+    public void onMessage(Message message) {
         log.info("onMessage {}", message);
     }
 }
