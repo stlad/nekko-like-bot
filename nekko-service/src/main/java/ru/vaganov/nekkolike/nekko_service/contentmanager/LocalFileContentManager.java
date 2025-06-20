@@ -1,4 +1,4 @@
-package ru.vaganov.nekkolike.contentmanager;
+package ru.vaganov.nekkolike.nekko_service.contentmanager;
 
 
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package ru.vaganov.nekkolike.contentmanager;
+package ru.vaganov.nekkolike.nekko_service.contentmanager;
 
 import java.io.File;
 import java.io.IOException;
