@@ -1,4 +1,4 @@
-package ru.vaganov.nekkolike.nekko_service.user.entity;
+package ru.vaganov.nekkolike.nekko_service.business.user.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

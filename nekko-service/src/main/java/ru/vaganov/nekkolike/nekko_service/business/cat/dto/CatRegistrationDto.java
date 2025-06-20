@@ -1,4 +1,4 @@
-package ru.vaganov.nekkolike.nekko_service.cat.dto;
+package ru.vaganov.nekkolike.nekko_service.business.cat.dto;
 
 import lombok.Builder;
 import lombok.Getter;

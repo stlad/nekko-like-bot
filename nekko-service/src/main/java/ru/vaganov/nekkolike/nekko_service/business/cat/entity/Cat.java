@@ -1,9 +1,8 @@
-package ru.vaganov.nekkolike.nekko_service.cat.entity;
+package ru.vaganov.nekkolike.nekko_service.business.cat.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.UuidGenerator;
-import ru.vaganov.nekkolike.nekko_service.user.entity.User;
+import ru.vaganov.nekkolike.nekko_service.business.user.entity.User;
 
 import java.util.UUID;
 

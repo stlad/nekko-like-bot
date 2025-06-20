@@ -1,8 +1,8 @@
-package ru.vaganov.nekkolike.nekko_service.user.repository;
+package ru.vaganov.nekkolike.nekko_service.business.user.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import ru.vaganov.nekkolike.nekko_service.user.entity.User;
+import ru.vaganov.nekkolike.nekko_service.business.user.entity.User;
 
 import java.util.Optional;
 import java.util.UUID;

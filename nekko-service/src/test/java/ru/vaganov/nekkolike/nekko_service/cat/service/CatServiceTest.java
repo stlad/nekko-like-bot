@@ -4,10 +4,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
-import ru.vaganov.nekkolike.nekko_service.cat.dto.CatRegistrationDto;
+import ru.vaganov.nekkolike.nekko_service.business.cat.dto.CatRegistrationDto;
+import ru.vaganov.nekkolike.nekko_service.business.cat.service.CatService;
 import ru.vaganov.nekkolike.nekko_service.config.BaseContextTest;
-import ru.vaganov.nekkolike.nekko_service.user.entity.User;
-import ru.vaganov.nekkolike.nekko_service.user.repository.UserRepository;
+import ru.vaganov.nekkolike.nekko_service.business.user.entity.User;
+import ru.vaganov.nekkolike.nekko_service.business.user.repository.UserRepository;
 
 import java.io.File;
 import java.io.IOException;

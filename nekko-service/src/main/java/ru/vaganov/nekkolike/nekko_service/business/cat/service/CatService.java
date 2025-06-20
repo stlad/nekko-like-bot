@@ -1,13 +1,13 @@
-package ru.vaganov.nekkolike.nekko_service.cat.service;
+package ru.vaganov.nekkolike.nekko_service.business.cat.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import ru.vaganov.nekkolike.nekko_service.cat.dto.CatRegistrationDto;
-import ru.vaganov.nekkolike.nekko_service.cat.entity.Cat;
-import ru.vaganov.nekkolike.nekko_service.cat.mapper.CatMapper;
-import ru.vaganov.nekkolike.nekko_service.cat.repository.CatRepository;
+import ru.vaganov.nekkolike.nekko_service.business.cat.dto.CatRegistrationDto;
+import ru.vaganov.nekkolike.nekko_service.business.cat.entity.Cat;
+import ru.vaganov.nekkolike.nekko_service.business.cat.mapper.CatMapper;
+import ru.vaganov.nekkolike.nekko_service.business.cat.repository.CatRepository;
 import ru.vaganov.nekkolike.nekko_service.contentmanager.ContentManager;
 import ru.vaganov.nekkolike.nekko_service.exception.ContentManagerException;
 
