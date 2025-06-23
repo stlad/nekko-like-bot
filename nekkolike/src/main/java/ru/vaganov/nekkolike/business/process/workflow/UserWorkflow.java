@@ -2,9 +2,7 @@ package ru.vaganov.nekkolike.business.process.workflow;
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.vaganov.nekkolike.business.process.workflow.dto.CatReviewDto;
-import ru.vaganov.nekkolike.business.process.workflow.dto.CatRegistrationDto;
-import ru.vaganov.nekkolike.business.process.workflow.dto.UserRegistrationDto;
+import ru.vaganov.nekkolike.business.process.workflow.dto.*;
 
 import java.util.UUID;
 
@@ -19,6 +17,8 @@ public class UserWorkflow {
     private UserRegistrationDto userRegistrationDto;
     private CatRegistrationDto catRegistrationDto;
     private CatReviewDto catReviewDto;
+    private MyCatsDto myCatsDto;
+    private CatInfoDto catInfoDto;
 
     public UserWorkflow(Long chatId) {
         this.chatId = chatId;
@@ -30,5 +30,9 @@ public class UserWorkflow {
 
     public void initCat(UUID catId) {
         catRegistrationDto = new CatRegistrationDto(chatId, catId);
+    }
+
+    public void initCatList() {
+        myCatsDto = new MyCatsDto();
     }
 }

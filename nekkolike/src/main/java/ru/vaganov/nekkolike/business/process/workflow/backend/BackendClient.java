@@ -16,4 +16,10 @@ public interface BackendClient {
     void registerCat(Long chatId, CatRegistrationDto dto);
 
     void registerUser(Long chatId, UserRegistrationDto dto);
+
+    void getCatPage(Long chatId, Integer page, Integer size);
+
+    void deleteCat(Long chatId, UUID catId);
+
+    void getCat(Long chatId, UUID catId);
 }

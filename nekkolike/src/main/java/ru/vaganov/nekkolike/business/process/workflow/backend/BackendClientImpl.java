@@ -38,4 +38,21 @@ public class BackendClientImpl implements BackendClient {
     public void registerUser(Long chatId, UserRegistrationDto dto) {
         log.info("Отправлена команда регистрации пользователя на бэкенд");
     }
+
+    @Override
+    public void getCatPage(Long chatId, Integer page, Integer size) {
+        log.info("Получение страницы с котиками {} {} {}", chatId, page, size);
+
+    }
+
+    @Override
+    public void deleteCat(Long chatId, UUID catId) {
+
+        log.info("Удаление котика");
+    }
+
+    @Override
+    public void getCat(Long chatId, UUID catId) {
+        log.info("Получение страницы котика");
+    }
 }

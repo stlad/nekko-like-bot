@@ -52,6 +52,21 @@ public class CommandExecutor {
             case SHOW_CATS_DISLIKE -> {
                 commandProvider.execute(WorkflowStep.SHOW_CAT_DISLIKE, updateData, sender);
             }
+            case MY_CATS -> {
+                commandProvider.execute(WorkflowStep.MY_CATS_STARTED, updateData, sender);
+            }
+            case MY_CATS_VIEW_NEXT -> {
+                commandProvider.execute(WorkflowStep.MY_CATS_VIEW_NEXT_PAGE, updateData, sender);
+            }
+            case MY_CATS_VIEW_PREV -> {
+                commandProvider.execute(WorkflowStep.MY_CATS_VIEW_PREV_PAGE, updateData, sender);
+            }
+            case MY_CATS_DELETE -> {
+                commandProvider.execute(WorkflowStep.MY_CATS_DELETE, updateData, sender);
+            }
+            case MY_CATS_INFO -> {
+                commandProvider.execute(WorkflowStep.MY_CATS_VIEW_CAT_INFO, updateData, sender);
+            }
             case USER_MESSAGE, BACKEND_MESSAGE -> {
                 var step = workflowRepository.findCurrentStepByChatId(updateData.chatId())
                         .orElseThrow(() -> new WorkflowNotFoundException(updateData.chatId()));
