@@ -6,9 +6,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import ru.vaganov.nekkolike.bot.commands.BotCommand;
 import ru.vaganov.nekkolike.bot.utils.SendObjectWrapper;
 
@@ -129,8 +127,30 @@ public class MessageBuilder {
         return message;
     }
 
-    public static SendObjectWrapper catAcceptPhoto(Long chatId, File photo) {
+    public static SendObjectWrapper catPhoto(Long chatId, File photo) {
         var sendPhoto = new SendPhoto(chatId.toString(), new InputFile(photo));
         return new SendObjectWrapper(sendPhoto, chatId);
+    }
+
+    public static SendObjectWrapper likeCatMenu(Long chatId, String username, String catName, UUID catId) {
+        var message = simpleTextByTemplate(chatId, MessageTemplate.ADD_CAT_ACCEPT_TEXT, catName, username);
+
+        var menu = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.MAIN_MENU));
+        menu.setCallbackData(BotCommand.MOVE_TO_MAIN_MENU.getCallbackPrefix());
+
+        var accept = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.SHOW_CATS_LIKE));
+        accept.setCallbackData(BotCommand.SHOW_CATS_LIKE.getCallbackPrefix() + "/" + catId.toString());
+
+        var starFromBeginning = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.SHOW_CATS_DISLIKE));
+        starFromBeginning.setCallbackData(BotCommand.SHOW_CATS_DISLIKE.getCallbackPrefix());
+
+
+        var buttons1 = List.of(accept, starFromBeginning);
+        var buttons2 = List.of(menu);
+        var rows = List.of(buttons1, buttons2);
+
+
+        message.getSendMessage().setReplyMarkup(new InlineKeyboardMarkup(rows));
+        return message;
     }
 }

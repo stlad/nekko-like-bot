@@ -1,4 +1,4 @@
-package ru.vaganov.nekkolike.business.process.workflow.command.register;
+package ru.vaganov.nekkolike.business.process.workflow.command.showcat;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,30 +15,27 @@ import ru.vaganov.nekkolike.business.process.workflow.repository.WorkflowReposit
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class JoinWaitUsernameCommand implements WorkflowCommand {
-
+public class ShowCatDislikeCommand implements WorkflowCommand {
     private final WorkflowRepository workflowRepository;
     private final BackendClient backendClient;
 
     @Override
     public void execute(UpdateData data, TelegramMessageSender sender) {
         var chatId = data.chatId();
-        var username = data.messageText();
-        log.info("Пользователь {} ввел имя ползователя", chatId);
+        log.info("Пользователь {} дизлайкнул котика", chatId);
         var flow = workflowRepository.findByChatId(chatId).orElse(new UserWorkflow(chatId));
-        flow.getUserRegistrationDto().setUsername(username);
+        flow.setCurrentStep(WorkflowStep.SHOW_CAT_RECEIVED);
 
-        backendClient.registerUser(chatId, flow.getUserRegistrationDto());
+        backendClient.dislikeCat(chatId, flow.getCatReviewDto().getCatId());
 
-        sender.send(MessageBuilder.greetingsText(chatId, username));
         sender.send(MessageBuilder.mainMenu(chatId));
 
-        flow.setCurrentStep(WorkflowStep.JOIN_COMPLETED);
+        flow.setCurrentStep(WorkflowStep.SHOW_CAT_COMPLETED);
         workflowRepository.saveFlow(flow);
     }
 
     @Override
     public WorkflowStep getInitStep() {
-        return WorkflowStep.JOIN_WAIT_FOR_NAME;
+        return WorkflowStep.SHOW_CAT_DISLIKE;
     }
 }

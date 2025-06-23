@@ -43,7 +43,16 @@ public class CommandExecutor {
             case ADD_CAT_ACCEPT -> {
                 commandProvider.execute(WorkflowStep.ADD_CAT_ACCEPTED, updateData, sender);
             }
-            case USER_MESSAGE -> {
+            case SHOW_CATS -> {
+                commandProvider.execute(WorkflowStep.SHOW_CAT_STARTED, updateData, sender);
+            }
+            case SHOW_CATS_LIKE -> {
+                commandProvider.execute(WorkflowStep.SHOW_CAT_LIKE, updateData, sender);
+            }
+            case SHOW_CATS_DISLIKE -> {
+                commandProvider.execute(WorkflowStep.SHOW_CAT_DISLIKE, updateData, sender);
+            }
+            case USER_MESSAGE, BACKEND_MESSAGE -> {
                 var step = workflowRepository.findCurrentStepByChatId(updateData.chatId())
                         .orElseThrow(() -> new WorkflowNotFoundException(updateData.chatId()));
 
