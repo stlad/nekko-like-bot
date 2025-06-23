@@ -8,6 +8,7 @@ import ru.vaganov.nekkolike.business.process.workflow.dto.UserRegistrationDto;
 import java.util.UUID;
 
 @Getter
+@Setter
 public class UserWorkflow {
 
     private Long chatId;

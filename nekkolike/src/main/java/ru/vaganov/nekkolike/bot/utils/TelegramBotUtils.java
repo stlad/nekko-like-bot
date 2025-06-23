@@ -5,6 +5,7 @@ import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.vaganov.nekkolike.bot.controller.RabbitResponseDto;
 import ru.vaganov.nekkolike.bot.exceptions.FileProcessingException;
 
 import java.io.File;
@@ -73,5 +74,13 @@ public class TelegramBotUtils {
         String messageText = update.getMessage() == null ? null : update.getMessage().getText();
 
         return new UpdateData(chatId, userName, photoFile, messageText, params);
+    }
+
+    public static UpdateData createUpdateData(RabbitResponseDto dto) {
+        var chatId = dto.getChatId();
+        var userName = dto.getTelegramUsername();
+        var messageText = dto.getErrorText();
+
+        return new UpdateData(chatId, userName, null, messageText, null);
     }
 }
