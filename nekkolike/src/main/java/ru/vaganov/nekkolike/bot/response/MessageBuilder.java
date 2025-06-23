@@ -11,6 +11,7 @@ import ru.vaganov.nekkolike.bot.commands.BotCommand;
 import ru.vaganov.nekkolike.bot.utils.SendObjectWrapper;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.List;
 import java.util.UUID;
 
@@ -79,6 +80,7 @@ public class MessageBuilder {
     private static SendObjectWrapper simpleTextByTemplate(Long chatId, MessageTemplate template, Object... args) {
         var message = SendMessage.builder()
                 .chatId(chatId)
+                .chatId(chatId)
                 .text(MessageTemplate.apply(template, args))
                 .build();
 
@@ -105,8 +107,11 @@ public class MessageBuilder {
         return simpleTextByTemplate(chatId, MessageTemplate.GREETINGS, username);
     }
 
-    public static SendObjectWrapper acceptCatName(Long chatId, String username, String catName, UUID catId) {
-        var message = simpleTextByTemplate(chatId, MessageTemplate.ADD_CAT_ACCEPT_TEXT, catName, username);
+    public static SendObjectWrapper acceptCatName(Long chatId, String username, String catName, UUID catId, File photo) {
+        var message = SendPhoto.builder()
+                .chatId(chatId.toString())
+                .photo(new InputFile((photo)))
+                .caption(MessageTemplate.apply(MessageTemplate.ADD_CAT_ACCEPT_TEXT, catName, username));
 
         var menu = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.MAIN_MENU));
         menu.setCallbackData(BotCommand.MOVE_TO_MAIN_MENU.getCallbackPrefix());
@@ -123,34 +128,29 @@ public class MessageBuilder {
         var rows = List.of(buttons1, buttons2);
 
 
-        message.getSendMessage().setReplyMarkup(new InlineKeyboardMarkup(rows));
-        return message;
+        message.replyMarkup(new InlineKeyboardMarkup(rows));
+        return new SendObjectWrapper(message.build(), chatId);
     }
 
-    public static SendObjectWrapper catPhoto(Long chatId, File photo) {
-        var sendPhoto = new SendPhoto(chatId.toString(), new InputFile(photo));
-        return new SendObjectWrapper(sendPhoto, chatId);
-    }
-
-    public static SendObjectWrapper likeCatMenu(Long chatId, String username, String catName, UUID catId) {
-        var message = simpleTextByTemplate(chatId, MessageTemplate.ADD_CAT_ACCEPT_TEXT, catName, username);
+    public static SendObjectWrapper likeCatMenu(Long chatId, String username, String catName, UUID catId, File photo) {
+        var message = SendPhoto.builder()
+                .chatId(chatId.toString())
+                .photo(new InputFile((photo)))
+                .caption(MessageTemplate.apply(MessageTemplate.ADD_CAT_ACCEPT_TEXT, catName, username));
 
         var menu = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.MAIN_MENU));
         menu.setCallbackData(BotCommand.MOVE_TO_MAIN_MENU.getCallbackPrefix());
 
-        var accept = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.SHOW_CATS_LIKE));
-        accept.setCallbackData(BotCommand.SHOW_CATS_LIKE.getCallbackPrefix() + "/" + catId.toString());
+        var like = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.SHOW_CATS_LIKE));
+        like.setCallbackData(BotCommand.SHOW_CATS_REVIEW.getCallbackPrefix() + "/LIKE" + "/" + catId.toString());
 
-        var starFromBeginning = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.SHOW_CATS_DISLIKE));
-        starFromBeginning.setCallbackData(BotCommand.SHOW_CATS_DISLIKE.getCallbackPrefix());
+        var dislike = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.SHOW_CATS_DISLIKE));
+        dislike.setCallbackData(BotCommand.SHOW_CATS_REVIEW.getCallbackPrefix() + "/DISLIKE" + "/" + catId.toString());
 
-
-        var buttons1 = List.of(accept, starFromBeginning);
+        var buttons1 = List.of(like, dislike);
         var buttons2 = List.of(menu);
         var rows = List.of(buttons1, buttons2);
-
-
-        message.getSendMessage().setReplyMarkup(new InlineKeyboardMarkup(rows));
-        return message;
+        message.replyMarkup(new InlineKeyboardMarkup(rows));
+        return new SendObjectWrapper(message.build(), chatId);
     }
 }

@@ -15,27 +15,31 @@ import ru.vaganov.nekkolike.business.process.workflow.repository.WorkflowReposit
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class ShowCatDislikeCommand implements WorkflowCommand {
+public class ShowCatReviewCommand implements WorkflowCommand {
     private final WorkflowRepository workflowRepository;
     private final BackendClient backendClient;
 
     @Override
     public void execute(UpdateData data, TelegramMessageSender sender) {
         var chatId = data.chatId();
-        log.info("Пользователь {} дизлайкнул котика", chatId);
+        log.info("Пользователь {} лайкнул котика", chatId);
         var flow = workflowRepository.findByChatId(chatId).orElse(new UserWorkflow(chatId));
         flow.setCurrentStep(WorkflowStep.SHOW_CAT_RECEIVED);
+        var isLike = "LIKE".equals(data.params()[1]);
+        if (isLike) {
+            backendClient.likeCat(chatId, flow.getCatReviewDto().getCatId());
+        } else {
+            backendClient.dislikeCat(chatId, flow.getCatReviewDto().getCatId());
+        }
 
-        backendClient.dislikeCat(chatId, flow.getCatReviewDto().getCatId());
+        backendClient.requestRandomCat(chatId);
 
-        sender.send(MessageBuilder.mainMenu(chatId));
-
-        flow.setCurrentStep(WorkflowStep.SHOW_CAT_COMPLETED);
+        flow.setCurrentStep(WorkflowStep.SHOW_CAT_WAIT_FOR_CAT);
         workflowRepository.saveFlow(flow);
     }
 
     @Override
     public WorkflowStep getInitStep() {
-        return WorkflowStep.SHOW_CAT_DISLIKE;
+        return WorkflowStep.SHOW_CAT_REVIEW;
     }
 }

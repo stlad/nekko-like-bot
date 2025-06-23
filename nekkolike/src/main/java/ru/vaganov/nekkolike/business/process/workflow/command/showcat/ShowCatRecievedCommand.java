@@ -28,8 +28,8 @@ public class ShowCatRecievedCommand implements WorkflowCommand {
 
         var catDto = flow.getCatReviewDto();
 
-        sender.send(MessageBuilder.catPhoto(chatId, flow.getCatReviewDto().getPhoto()));
-        sender.send(MessageBuilder.likeCatMenu(chatId, catDto.getAuthorTelegramUsername(), catDto.getCatName(), catDto.getCatId()));
+        sender.send(MessageBuilder.likeCatMenu(chatId, catDto.getAuthorTelegramUsername(), catDto.getCatName(),
+                catDto.getCatId(), flow.getCatReviewDto().getPhoto()));
 
         workflowRepository.saveFlow(flow);
     }
