@@ -38,14 +38,19 @@ public class RabbitMQResponseListener {
             throw new CommandProcessingFailedException();
         }
         var updateData = TelegramBotUtils.createUpdateData(dto);
-        var flow = workflowRepository.findByChatId(updateData.chatId()).orElseThrow(() -> new WorkflowNotFoundException(updateData.chatId()));
+        var flow = workflowRepository.findByChatId(updateData.chatId())
+                .orElse(new UserWorkflow(updateData.chatId()));
 
-
-        workflowRepository.saveFlow(flow);
-        //TODO запуск commandExecutor.executeCommand(BACKEND_RESPONSE, updateData, telegramMessageSender);
-        commandExecutor.executeCommand(BotCommand.USER_MESSAGE, updateData, telegramMessageSender);
-
-
+//        TODO Пример обработки команд
+//        if(dto.getCatReview() != null && SHOW_CATS_REVIEW.equals(flow.getCurrentStep())){
+//            flow.setCatReviewDto(dto.getCatReview());
+//            workflowRepository.saveFlow(flow);
+//            commandExecutor.executeCommand(WorkflowStep.SHOW_CAT_RECEIVED, updateData, telegramMessageSender);
+//        }
+//        else{
+//            throw new CommandProcessingFailedException();
+//        }
+//        Для других команд.......
     }
 
 }

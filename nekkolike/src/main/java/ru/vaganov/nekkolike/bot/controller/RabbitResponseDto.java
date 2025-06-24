@@ -14,4 +14,5 @@ public class RabbitResponseDto {
     private final String errorText;
 
     //TODO тут нужные ДТОшки, из который берутся данные для процессов
+    //    НАПРИМЕР private final CatReviewDto catReview;
 }
