@@ -15,7 +15,7 @@ public enum BotCommand {
     SHOW_CATS_REVIEW("review_cat"),
     SHOW_CAT_RECEIVED(null),
     MY_CATS("my_cats"),
-    MY_CATS_VIEW_NEXT("next_my_cats"),
+    MY_CATS_PAGE("next_my_cats"),
     MY_CATS_VIEW_PREV("prev_my_cats"),
     MY_CATS_DELETE("delete_cat"),
     MY_CATS_INFO("cat_info"),

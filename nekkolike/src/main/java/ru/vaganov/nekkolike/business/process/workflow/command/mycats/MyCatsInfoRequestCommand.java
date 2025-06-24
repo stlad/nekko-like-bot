@@ -29,7 +29,7 @@ public class MyCatsInfoRequestCommand implements WorkflowCommand {
 
         backendClient.getCat(chatId, UUID.fromString(catId));
 
-        flow.setCurrentStep(WorkflowStep.MY_CATS_WAIT_CAT_INFO);
+        flow.setCurrentStep(WorkflowStep.MY_CATS_INFO_RECEIVED);
         workflowRepository.saveFlow(flow);
     }
 

@@ -13,7 +13,6 @@ import ru.vaganov.nekkolike.business.process.workflow.dto.MyCatsDto;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.io.FileInputStream;
 import java.util.List;
 import java.util.UUID;
 
@@ -54,7 +53,7 @@ public class MessageBuilder {
         showCats.setCallbackData(BotCommand.SHOW_CATS.getCallbackPrefix());
 
         var myCats = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.MY_CATS));
-        myCats.setCallbackData(BotCommand.MY_CATS.getCallbackPrefix());
+        myCats.setCallbackData(BotCommand.MY_CATS.getCallbackPrefix()+ "/NONE");
 
         var buttons1 = List.of(addCat, showCats, myCats);
         var buttons2 = List.of(menu);
@@ -163,10 +162,11 @@ public class MessageBuilder {
         menu.setCallbackData(BotCommand.MOVE_TO_MAIN_MENU.getCallbackPrefix());
 
         var prev = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.PREV));
-        menu.setCallbackData(BotCommand.MY_CATS_VIEW_PREV.getCallbackPrefix());
+        menu.setCallbackData(BotCommand.MY_CATS_PAGE.getCallbackPrefix() + "/PREV");
 
         var next = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.NEXT));
-        menu.setCallbackData(BotCommand.MY_CATS_VIEW_NEXT.getCallbackPrefix());
+        menu.setCallbackData(BotCommand.MY_CATS_PAGE.getCallbackPrefix() + "/NEXT");
+
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         var currentCatRow = new ArrayList<InlineKeyboardButton>();
         for (int i = 0; i < cats.size(); i++) {
@@ -191,9 +191,11 @@ public class MessageBuilder {
         return cat;
     }
 
-
-    public static SendObjectWrapper catInfoMenu(Long chatId, String username, String catName, UUID catId) {
-        var message = simpleTextByTemplate(chatId, MessageTemplate.ADD_CAT_ACCEPT_TEXT, catName, username);
+    public static SendObjectWrapper catInfoMenu(Long chatId, String username, String catName, UUID catId, File photo) {
+        var message = SendPhoto.builder()
+                .chatId(chatId.toString())
+                .photo(new InputFile((photo)))
+                .caption(MessageTemplate.apply(MessageTemplate.ADD_CAT_ACCEPT_TEXT, catName, username));
 
         var menu = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.MAIN_MENU));
         menu.setCallbackData(BotCommand.MOVE_TO_MAIN_MENU.getCallbackPrefix());
@@ -205,9 +207,8 @@ public class MessageBuilder {
         var buttons2 = List.of(menu);
         var rows = List.of(buttons1, buttons2);
 
-
-        message.getSendMessage().setReplyMarkup(new InlineKeyboardMarkup(rows));
-        return message;
+        message.replyMarkup(new InlineKeyboardMarkup(rows));
+        return new SendObjectWrapper(message.build(), chatId);
     }
 
     public static SendObjectWrapper deleteCat(Long chatId) {
