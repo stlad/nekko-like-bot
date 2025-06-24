@@ -15,7 +15,13 @@ public class CatInfoDto {
 
     private UUID catId;
 
+    private String photoName;
+
     private byte[] photo;
 
     private String catName;
+
+    private Integer likeCount;
+
+    private Integer dislikeCount;
 }

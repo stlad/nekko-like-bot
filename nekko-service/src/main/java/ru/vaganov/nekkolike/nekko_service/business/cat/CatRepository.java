@@ -5,7 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import ru.vaganov.nekkolike.nekko_service.business.cat.dto.CatListElementDto;
-import ru.vaganov.nekkolike.nekko_service.business.cat.dto.CatReviewDto;
+import ru.vaganov.nekkolike.nekko_service.business.cat.dto.CatInfoDto;
 import ru.vaganov.nekkolike.nekko_service.business.cat.entity.Cat;
 
 import java.util.UUID;
@@ -40,5 +40,5 @@ public interface CatRepository extends JpaRepository<Cat, UUID> {
             INNER JOIN t_user usr ON usr.id = cat.link_user
             ORDER BY RANDOM() LIMIT 1
             """, nativeQuery = true)
-    CatReviewDto findRandomCat();
+    CatInfoDto findRandomCat();
 }

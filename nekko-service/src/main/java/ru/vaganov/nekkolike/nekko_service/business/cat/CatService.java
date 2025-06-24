@@ -1,6 +1,5 @@
 package ru.vaganov.nekkolike.nekko_service.business.cat;
 
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Component;
 import ru.vaganov.nekkolike.nekko_service.business.cat.dto.CatInfoDto;
 import ru.vaganov.nekkolike.nekko_service.business.cat.dto.CatListDto;
 import ru.vaganov.nekkolike.nekko_service.business.cat.dto.CatRegistrationDto;
-import ru.vaganov.nekkolike.nekko_service.business.cat.dto.CatReviewDto;
 import ru.vaganov.nekkolike.nekko_service.business.cat.entity.Cat;
 import ru.vaganov.nekkolike.nekko_service.business.review.entity.Review;
 import ru.vaganov.nekkolike.nekko_service.business.review.entity.ReviewRate;
@@ -28,7 +26,6 @@ public class CatService {
     private final CatRepository catRepository;
     private final ContentManager contentManager;
     private final UserRepository userRepository;
-    private final EntityManager entityManager;
     private final ReviewRepository reviewRepository;
 
     @Transactional
@@ -61,7 +58,7 @@ public class CatService {
     }
 
     @Transactional
-    public CatReviewDto findRandomCat() {
+    public CatInfoDto findRandomCat() {
         var cat = catRepository.findRandomCat();
         var photo = contentManager.loadFile(cat.getPhotoName());
         cat.setPhoto(photo);
@@ -98,6 +95,7 @@ public class CatService {
                 .catName(cat.getCatName())
                 .catId(cat.getId())
                 .photo(photo)
+                .photoName(cat.getPhotoName())
                 .build();
     }
 }
