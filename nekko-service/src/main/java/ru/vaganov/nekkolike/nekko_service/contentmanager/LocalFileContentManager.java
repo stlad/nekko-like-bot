@@ -5,14 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import ru.vaganov.nekkolike.nekko_service.exception.ContentManagerException;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 
 @Slf4j
 @Component
@@ -30,13 +29,13 @@ public class LocalFileContentManager implements ContentManager {
     }
 
     @Override
-    public List<File> loadAllFiles(String directoryPath) throws IOException {
-        log.trace("Загрузка файлов из директории {}", directoryPath);
-        try (var stream = Files.list(Paths.get(basePath + directoryPath))) {
-            return stream
-                    .filter(path -> !Files.isDirectory(path))
-                    .map(Path::toFile)
-                    .toList();
+    public byte[] loadFile(String filePath) {
+        var fullpath = basePath + filePath;
+        log.trace("Загрузка файла {}", fullpath);
+        try {
+            return Files.readAllBytes(Paths.get(fullpath));
+        } catch (IOException e) {
+            throw new ContentManagerException(filePath, e);
         }
     }
 }
