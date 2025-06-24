@@ -15,6 +15,8 @@ public class CatReviewDto {
 
     private UUID catId;
 
+    private String photoName;
+
     private byte[] photo;
 
     private String catName;

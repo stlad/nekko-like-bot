@@ -15,6 +15,7 @@ import ru.vaganov.nekkolike.nekko_service.business.cat.dto.CatReviewDto;
 import ru.vaganov.nekkolike.nekko_service.business.cat.entity.Cat;
 import ru.vaganov.nekkolike.nekko_service.business.review.entity.Review;
 import ru.vaganov.nekkolike.nekko_service.business.review.entity.ReviewRate;
+import ru.vaganov.nekkolike.nekko_service.business.review.entity.ReviewRepository;
 import ru.vaganov.nekkolike.nekko_service.business.user.UserRepository;
 import ru.vaganov.nekkolike.nekko_service.contentmanager.ContentManager;
 
@@ -28,6 +29,7 @@ public class CatService {
     private final ContentManager contentManager;
     private final UserRepository userRepository;
     private final EntityManager entityManager;
+    private final ReviewRepository reviewRepository;
 
     @Transactional
     public Cat createCat(CatRegistrationDto dto) {
@@ -60,18 +62,10 @@ public class CatService {
 
     @Transactional
     public CatReviewDto findRandomCat() {
-        var cat = catRepository.findRandomCat().orElseThrow();
-        var rate = catRepository.getRates(cat.getId());
+        var cat = catRepository.findRandomCat();
         var photo = contentManager.loadFile(cat.getPhotoName());
-        return CatReviewDto.builder()
-                .authorChatId(cat.getUser().getChatId())
-                .authorTelegramUsername(cat.getUser().getTelegramUsername())
-                .catName(cat.getCatName())
-                .catId(cat.getId())
-                .photo(photo)
-                .dislikeCount(rate.getDislikeCount())
-                .likeCount(rate.getLikeCount())
-                .build();
+        cat.setPhoto(photo);
+        return cat;
     }
 
     @Transactional
@@ -81,14 +75,16 @@ public class CatService {
 
     @Transactional
     public void rateCat(UUID catId, Long rateAuthorChatId, ReviewRate rate) {
-        var user = userRepository.findByChatId(rateAuthorChatId).orElseThrow();
-        var cat = catRepository.findById(catId).orElseThrow();
-        var review = Review.builder()
-                .rate(rate)
-                .user(user)
-                .cat(cat)
-                .build();
-        entityManager.persist(review);
+        Review review = null;
+        var reviewOpt = reviewRepository.findByUserChatId(rateAuthorChatId, catId);
+        review = reviewOpt.orElseGet(() ->
+                Review.builder()
+                        .user(userRepository.findByChatId(rateAuthorChatId).orElseThrow())
+                        .cat(catRepository.findById(catId).orElseThrow())
+                        .build()
+        );
+        review.setRate(rate);
+        reviewRepository.save(review);
     }
 
     @Transactional

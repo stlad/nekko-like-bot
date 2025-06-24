@@ -72,4 +72,9 @@
                                  referencedColumnNames="id"
                                  onDelete="CASCADE"/>
     </changeSet>
+
+    <changeSet id="Добавление уникальности на поля пользователя и кота для оценки" author="Vaganov Vladislav">
+        <addUniqueConstraint tableName="t_review" columnNames="link_cat, link_user"
+                             constraintName="uc_t_review$_link_cat_link_user"/>
+    </changeSet>
 </databaseChangeLog>
