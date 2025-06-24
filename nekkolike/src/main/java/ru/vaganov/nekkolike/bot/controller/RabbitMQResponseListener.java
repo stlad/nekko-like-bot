@@ -7,16 +7,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
-import ru.vaganov.nekkolike.bot.commands.BotCommand;
 import ru.vaganov.nekkolike.bot.exceptions.CommandProcessingFailedException;
-import ru.vaganov.nekkolike.bot.exceptions.WorkflowNotFoundException;
 import ru.vaganov.nekkolike.bot.response.TelegramMessageSender;
 import ru.vaganov.nekkolike.bot.service.CommandExecutor;
 import ru.vaganov.nekkolike.bot.utils.TelegramBotUtils;
-import ru.vaganov.nekkolike.bot.utils.UpdateData;
 import ru.vaganov.nekkolike.business.process.workflow.UserWorkflow;
-import ru.vaganov.nekkolike.business.process.workflow.dto.CatRegistrationDto;
 import ru.vaganov.nekkolike.business.process.workflow.repository.WorkflowRepository;
+import ru.vaganov.nekkolike.common.dto.RabbitResponseDto;
 
 @Component
 @RequiredArgsConstructor

@@ -1,10 +1,8 @@
-package ru.vaganov.nekkolike.bot.controller;
+package ru.vaganov.nekkolike.common.dto;
 
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import ru.vaganov.nekkolike.business.process.workflow.dto.CatRegistrationDto;
-import ru.vaganov.nekkolike.business.process.workflow.dto.UserRegistrationDto;
 
 //TODO данный класс должен лежать в пакете с backendClient
 @Getter

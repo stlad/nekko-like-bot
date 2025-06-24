@@ -5,13 +5,11 @@ import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import ru.vaganov.nekkolike.bot.controller.RabbitResponseDto;
 import ru.vaganov.nekkolike.bot.exceptions.FileProcessingException;
+import ru.vaganov.nekkolike.common.dto.RabbitResponseDto;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
 
 public class TelegramBotUtils {
 

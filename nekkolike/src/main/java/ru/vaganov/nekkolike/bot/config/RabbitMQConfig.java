@@ -2,18 +2,9 @@ package ru.vaganov.nekkolike.bot.config;
 
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
-import org.springframework.amqp.support.converter.DefaultClassMapper;
-import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
-import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.vaganov.nekkolike.bot.controller.RabbitResponseDto;
-import ru.vaganov.nekkolike.business.process.workflow.dto.CatRegistrationDto;
-import ru.vaganov.nekkolike.business.process.workflow.dto.UserRegistrationDto;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Configuration
 @EnableRabbit

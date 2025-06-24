@@ -1,4 +1,4 @@
-package ru.vaganov.nekkolike.business.process.workflow.dto;
+package ru.vaganov.nekkolike.common.dto;
 
 import lombok.Getter;
 import lombok.Setter;

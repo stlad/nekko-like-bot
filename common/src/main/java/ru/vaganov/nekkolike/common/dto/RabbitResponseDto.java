@@ -1,4 +1,4 @@
-package ru.vaganov.nekkolike.bot.controller;
+package ru.vaganov.nekkolike.common.dto;
 
 import lombok.Data;
 import lombok.Getter;
