@@ -3,14 +3,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.2</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<groupId>ru.vaganov</groupId>
+		<artifactId>nekkolike-project</artifactId>
+		<version>0.0.1</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
-	<groupId>ru.vaganov</groupId>
 	<artifactId>nekkolike</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>nekkolike</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
@@ -43,7 +42,7 @@
 		<dependency>
 			<groupId>ru.vaganov</groupId>
 			<artifactId>common</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>0.0.1</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>
