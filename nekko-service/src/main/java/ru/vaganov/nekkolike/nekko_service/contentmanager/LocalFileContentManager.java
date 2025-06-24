@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.vaganov.nekkolike.nekko_service.exception.ContentManagerException;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -22,9 +22,13 @@ public class LocalFileContentManager implements ContentManager {
 
 
     @Override
-    public void save(String filename, InputStream inputStream) throws IOException {
+    public void save(String filename, byte[] fileData) {
         var file = new File(String.format("%s/%s", basePath, filename));
-        FileUtils.copyInputStreamToFile(inputStream, file);
+        try {
+            FileUtils.copyInputStreamToFile(new ByteArrayInputStream(fileData), file);
+        } catch (IOException e) {
+            throw new ContentManagerException(filename, e);
+        }
         log.info("Файл {} сахранен в: {}", file.getName(), file.getAbsolutePath());
     }
 

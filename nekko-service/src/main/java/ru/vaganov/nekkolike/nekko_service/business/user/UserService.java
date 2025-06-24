@@ -17,11 +17,14 @@ import javax.validation.Valid;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
 
     @Transactional
     public User registerUser(@Valid UserRegistrationDto dto) {
-        var user = userMapper.fromDto(dto);
+        var user = User.builder()
+                .chatId(dto.getChatId())
+                .username(dto.getUsername())
+                .telegramUsername(dto.getTelegramUsername())
+                .build();
         try {
             user = userRepository.saveAndFlush(user);
         } catch (DataIntegrityViolationException e) {
