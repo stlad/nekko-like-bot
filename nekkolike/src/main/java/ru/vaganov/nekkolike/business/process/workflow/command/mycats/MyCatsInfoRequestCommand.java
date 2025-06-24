@@ -35,6 +35,6 @@ public class MyCatsInfoRequestCommand implements WorkflowCommand {
 
     @Override
     public WorkflowStep getInitStep() {
-        return WorkflowStep.MY_CATS_VIEW_CAT_INFO;
+        return WorkflowStep.MY_CATS_CAT_INFO;
     }
 }

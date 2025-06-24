@@ -59,7 +59,7 @@ public class CommandExecutor {
                 commandProvider.execute(WorkflowStep.MY_CATS_DELETE, updateData, sender);
             }
             case MY_CATS_INFO -> {
-                commandProvider.execute(WorkflowStep.MY_CATS_VIEW_CAT_INFO, updateData, sender);
+                commandProvider.execute(WorkflowStep.MY_CATS_CAT_INFO, updateData, sender);
             }
             case USER_MESSAGE -> {
                 var step = workflowRepository.findCurrentStepByChatId(updateData.chatId())
