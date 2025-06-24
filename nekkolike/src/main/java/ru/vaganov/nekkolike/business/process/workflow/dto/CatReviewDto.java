@@ -24,3 +24,5 @@ public class CatReviewDto {
 
     private Integer dislikeCount;
 }
+
+
