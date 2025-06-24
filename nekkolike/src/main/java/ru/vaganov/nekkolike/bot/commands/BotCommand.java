@@ -13,11 +13,11 @@ public enum BotCommand {
     MOVE_TO_MAIN_MENU("main_menu"),
     SHOW_CATS("show_cats"),
     SHOW_CATS_REVIEW("review_cat"),
+    SHOW_CAT_RECEIVED(null),
     MY_CATS("my_cats"),
     ADD_CAT("add_cat"),
     ADD_CAT_ACCEPT("add_cat_accept"),
     USER_MESSAGE(null),
-    BACKEND_MESSAGE(null),
     NONE(null);
 
     private final String callbackPrefix;

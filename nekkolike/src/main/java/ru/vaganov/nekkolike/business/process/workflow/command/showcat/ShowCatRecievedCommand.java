@@ -8,7 +8,6 @@ import ru.vaganov.nekkolike.bot.response.TelegramMessageSender;
 import ru.vaganov.nekkolike.bot.utils.UpdateData;
 import ru.vaganov.nekkolike.business.process.workflow.UserWorkflow;
 import ru.vaganov.nekkolike.business.process.workflow.WorkflowStep;
-import ru.vaganov.nekkolike.business.process.workflow.backend.BackendClient;
 import ru.vaganov.nekkolike.business.process.workflow.command.WorkflowCommand;
 import ru.vaganov.nekkolike.business.process.workflow.repository.WorkflowRepository;
 
@@ -17,25 +16,21 @@ import ru.vaganov.nekkolike.business.process.workflow.repository.WorkflowReposit
 @RequiredArgsConstructor
 public class ShowCatRecievedCommand implements WorkflowCommand {
     private final WorkflowRepository workflowRepository;
-    private final BackendClient backendClient;
 
     @Override
     public void execute(UpdateData data, TelegramMessageSender sender) {
         var chatId = data.chatId();
         log.info("Пользователь {} получил котика для оценки", chatId);
         var flow = workflowRepository.findByChatId(chatId).orElse(new UserWorkflow(chatId));
-        flow.setCurrentStep(WorkflowStep.SHOW_CAT_RECEIVED);
 
         var catDto = flow.getCatReviewDto();
 
         sender.send(MessageBuilder.likeCatMenu(chatId, catDto.getAuthorTelegramUsername(), catDto.getCatName(),
-                catDto.getCatId(), flow.getCatReviewDto().getPhoto()));
-
-        workflowRepository.saveFlow(flow);
+                catDto.getCatId(), catDto.getPhoto()));
     }
 
     @Override
     public WorkflowStep getInitStep() {
-        return WorkflowStep.SHOW_CAT_WAIT_FOR_CAT;
+        return WorkflowStep.SHOW_CAT_RECEIVED;
     }
 }

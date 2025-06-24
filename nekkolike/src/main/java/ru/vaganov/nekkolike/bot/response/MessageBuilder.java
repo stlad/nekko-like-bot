@@ -80,7 +80,6 @@ public class MessageBuilder {
     private static SendObjectWrapper simpleTextByTemplate(Long chatId, MessageTemplate template, Object... args) {
         var message = SendMessage.builder()
                 .chatId(chatId)
-                .chatId(chatId)
                 .text(MessageTemplate.apply(template, args))
                 .build();
 

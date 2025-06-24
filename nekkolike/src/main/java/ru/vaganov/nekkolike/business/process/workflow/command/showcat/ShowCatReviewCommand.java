@@ -3,7 +3,6 @@ package ru.vaganov.nekkolike.business.process.workflow.command.showcat;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import ru.vaganov.nekkolike.bot.response.MessageBuilder;
 import ru.vaganov.nekkolike.bot.response.TelegramMessageSender;
 import ru.vaganov.nekkolike.bot.utils.UpdateData;
 import ru.vaganov.nekkolike.business.process.workflow.UserWorkflow;
@@ -11,6 +10,8 @@ import ru.vaganov.nekkolike.business.process.workflow.WorkflowStep;
 import ru.vaganov.nekkolike.business.process.workflow.backend.BackendClient;
 import ru.vaganov.nekkolike.business.process.workflow.command.WorkflowCommand;
 import ru.vaganov.nekkolike.business.process.workflow.repository.WorkflowRepository;
+
+import java.util.UUID;
 
 @Component
 @Slf4j
@@ -24,18 +25,15 @@ public class ShowCatReviewCommand implements WorkflowCommand {
         var chatId = data.chatId();
         log.info("Пользователь {} лайкнул котика", chatId);
         var flow = workflowRepository.findByChatId(chatId).orElse(new UserWorkflow(chatId));
-        flow.setCurrentStep(WorkflowStep.SHOW_CAT_RECEIVED);
         var isLike = "LIKE".equals(data.params()[1]);
+        var catId = UUID.fromString(data.params()[2]);
         if (isLike) {
-            backendClient.likeCat(chatId, flow.getCatReviewDto().getCatId());
+            backendClient.likeCat(chatId, catId);
         } else {
-            backendClient.dislikeCat(chatId, flow.getCatReviewDto().getCatId());
+            backendClient.dislikeCat(chatId, catId);
         }
 
         backendClient.requestRandomCat(chatId);
-
-        flow.setCurrentStep(WorkflowStep.SHOW_CAT_WAIT_FOR_CAT);
-        workflowRepository.saveFlow(flow);
     }
 
     @Override
