@@ -13,4 +13,8 @@ public enum WorkflowStep {
     ADD_CAT_WAIT_FOR_ACCEPT,
     ADD_CAT_ACCEPTED,
     ADD_CAT_COMPLETED,
+
+    SHOW_CAT_STARTED,
+    SHOW_CAT_RECEIVED,
+    SHOW_CAT_REVIEW,
 }

@@ -9,6 +9,7 @@ import ru.vaganov.nekkolike.bot.response.MessageBuilder;
 import ru.vaganov.nekkolike.bot.response.TelegramMessageSender;
 import ru.vaganov.nekkolike.bot.utils.UpdateData;
 import ru.vaganov.nekkolike.business.process.workflow.WorkflowStep;
+import ru.vaganov.nekkolike.business.process.workflow.backend.BackendClient;
 import ru.vaganov.nekkolike.business.process.workflow.command.WorkflowCommand;
 import ru.vaganov.nekkolike.business.process.workflow.repository.WorkflowRepository;
 
@@ -17,6 +18,7 @@ import ru.vaganov.nekkolike.business.process.workflow.repository.WorkflowReposit
 @Slf4j
 public class AddCatAcceptCommand implements WorkflowCommand {
     private final WorkflowRepository workflowRepository;
+    private final BackendClient backendClient;
 
     @Override
     public void execute(UpdateData data, TelegramMessageSender sender) {
@@ -35,7 +37,7 @@ public class AddCatAcceptCommand implements WorkflowCommand {
         sender.send(MessageBuilder.catCreated(chatId));
         sender.send(MessageBuilder.mainMenu(chatId));
 
-        //TODO Сохранение котика в сервис
+        backendClient.registerCat(chatId, flow.getCatRegistrationDto());
 
         flow.setCurrentStep(WorkflowStep.ADD_CAT_COMPLETED);
         workflowRepository.saveFlow(flow);

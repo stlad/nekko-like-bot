@@ -1,4 +1,4 @@
-package ru.vaganov.nekkolike.business.process.workflow.command.register;
+package ru.vaganov.nekkolike.business.process.workflow.command.showcat;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,37 +8,29 @@ import ru.vaganov.nekkolike.bot.response.TelegramMessageSender;
 import ru.vaganov.nekkolike.bot.utils.UpdateData;
 import ru.vaganov.nekkolike.business.process.workflow.UserWorkflow;
 import ru.vaganov.nekkolike.business.process.workflow.WorkflowStep;
-import ru.vaganov.nekkolike.business.process.workflow.backend.BackendClient;
 import ru.vaganov.nekkolike.business.process.workflow.command.WorkflowCommand;
 import ru.vaganov.nekkolike.business.process.workflow.repository.WorkflowRepository;
 
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class JoinWaitUsernameCommand implements WorkflowCommand {
-
+public class ShowCatRecievedCommand implements WorkflowCommand {
     private final WorkflowRepository workflowRepository;
-    private final BackendClient backendClient;
 
     @Override
     public void execute(UpdateData data, TelegramMessageSender sender) {
         var chatId = data.chatId();
-        var username = data.messageText();
-        log.info("Пользователь {} ввел имя ползователя", chatId);
+        log.info("Пользователь {} получил котика для оценки", chatId);
         var flow = workflowRepository.findByChatId(chatId).orElse(new UserWorkflow(chatId));
-        flow.getUserRegistrationDto().setUsername(username);
 
-        backendClient.registerUser(chatId, flow.getUserRegistrationDto());
+        var catDto = flow.getCatReviewDto();
 
-        sender.send(MessageBuilder.greetingsText(chatId, username));
-        sender.send(MessageBuilder.mainMenu(chatId));
-
-        flow.setCurrentStep(WorkflowStep.JOIN_COMPLETED);
-        workflowRepository.saveFlow(flow);
+        sender.send(MessageBuilder.likeCatMenu(chatId, catDto.getAuthorTelegramUsername(), catDto.getCatName(),
+                catDto.getCatId(), catDto.getPhoto(), catDto.getLikeCount(), catDto.getDislikeCount()));
     }
 
     @Override
     public WorkflowStep getInitStep() {
-        return WorkflowStep.JOIN_WAIT_FOR_NAME;
+        return WorkflowStep.SHOW_CAT_RECEIVED;
     }
 }
