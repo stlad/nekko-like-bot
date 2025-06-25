@@ -9,6 +9,8 @@ public enum MessageTemplate {
     MAIN_MENU("Главное меню"),
     MY_CATS("Мои котики"),
     SHOW_CATS("Смотреть котиков"),
+    SHOW_CATS_LIKE("\uD83D\uDC4D(%s)"),
+    SHOW_CATS_DISLIKE("\uD83D\uDC4E(%s)"),
     ADD_CAT("Добавить котика"),
     NEXT("Далее"),
     PREV("Назад"),

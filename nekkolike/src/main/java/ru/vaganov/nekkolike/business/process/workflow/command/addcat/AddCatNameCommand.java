@@ -27,8 +27,8 @@ public class AddCatNameCommand implements WorkflowCommand {
 
         flow.getCatRegistrationDto().setCatName(catName);
 
-        sender.send(MessageBuilder.catAcceptPhoto(chatId, flow.getCatRegistrationDto().getPhoto()));
-        sender.send(MessageBuilder.acceptCatName(chatId, telegramUserName, catName, flow.getCatRegistrationDto().getCatId()));
+        sender.send(MessageBuilder.acceptCatName(chatId, telegramUserName, catName,
+                flow.getCatRegistrationDto().getCatId(), flow.getCatRegistrationDto().getPhoto()));
 
         flow.setCurrentStep(WorkflowStep.ADD_CAT_WAIT_FOR_ACCEPT);
         workflowRepository.saveFlow(flow);
