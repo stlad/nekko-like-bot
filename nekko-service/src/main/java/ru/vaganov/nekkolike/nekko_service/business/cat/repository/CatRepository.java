@@ -1,11 +1,10 @@
-package ru.vaganov.nekkolike.nekko_service.business.cat;
+package ru.vaganov.nekkolike.nekko_service.business.cat.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import ru.vaganov.nekkolike.common.dto.CatListElementDto;
-import ru.vaganov.nekkolike.common.dto.CatInfoDto;
 import ru.vaganov.nekkolike.nekko_service.business.cat.entity.Cat;
 
 import java.util.UUID;

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import ru.vaganov.nekkolike.common.dto.CatRegistrationDto;
-import ru.vaganov.nekkolike.nekko_service.business.cat.CatRepository;
+import ru.vaganov.nekkolike.nekko_service.business.cat.repository.CatRepository;
 import ru.vaganov.nekkolike.nekko_service.business.cat.CatService;
 import ru.vaganov.nekkolike.nekko_service.business.cat.entity.Cat;
 import ru.vaganov.nekkolike.nekko_service.business.user.UserRepository;
