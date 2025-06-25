@@ -1,0 +1,80 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="Создание пользователя" author="Vaganov Vladislav">
+        <createTable tableName="t_user">
+            <column name="id" type="uuid" remarks="Ид записи">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="username" type="varchar" remarks="Имя пользователя">
+                <constraints nullable="false"/>
+            </column>
+            <column name="telegram_username" type="varchar" remarks="Имя пользователя в telegram"/>
+            <column name="chat_id" type="bigint" remarks="Ид телеграм чата пользователя">
+                <constraints unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="Создание таблицы котика" author="Vaganov Vladislav">
+        <createTable tableName="t_cat">
+            <column name="id" type="uuid" remarks="Ид записи">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="cat_name" type="varchar" remarks="Кличка котика">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="photo_name" type="varchar" remarks="Путь до файла-картинки">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="link_user" type="uuid" remarks="Ссылка на автора"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="t_cat"
+                                 baseColumnNames="link_user"
+                                 constraintName="fk_cat2user"
+                                 referencedTableName="t_user"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="Создание таблицы отзыввов" author="Vaganov Vladislav">
+        <createTable tableName="t_review">
+            <column name="id" type="uuid" remarks="Ид записи">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="rate" type="varchar" remarks="Оценка">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="link_user" type="uuid" remarks="Ссылка на автора"/>
+            <column name="link_cat" type="uuid" remarks="Ссылка на котика"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="t_review"
+                                 baseColumnNames="link_user"
+                                 constraintName="fk_review2user"
+                                 referencedTableName="t_user"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint baseTableName="t_review"
+                                 baseColumnNames="link_cat"
+                                 constraintName="fk_review2catr"
+                                 referencedTableName="t_cat"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="Добавление уникальности на поля пользователя и кота для оценки" author="Vaganov Vladislav">
+        <addUniqueConstraint tableName="t_review" columnNames="link_cat, link_user"
+                             constraintName="uc_t_review$_link_cat_link_user"/>
+    </changeSet>
+</databaseChangeLog>
