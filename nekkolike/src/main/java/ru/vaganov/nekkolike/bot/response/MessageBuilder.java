@@ -6,13 +6,11 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import ru.vaganov.nekkolike.bot.commands.BotCommand;
 import ru.vaganov.nekkolike.bot.utils.SendObjectWrapper;
 
-import java.io.File;
+import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.UUID;
 
@@ -129,8 +127,8 @@ public class MessageBuilder {
         return message;
     }
 
-    public static SendObjectWrapper catAcceptPhoto(Long chatId, File photo) {
-        var sendPhoto = new SendPhoto(chatId.toString(), new InputFile(photo));
+    public static SendObjectWrapper catAcceptPhoto(Long chatId, byte[] photo) {
+        var sendPhoto = new SendPhoto(chatId.toString(), new InputFile(new ByteArrayInputStream(photo), chatId.toString()));
         return new SendObjectWrapper(sendPhoto, chatId);
     }
 }

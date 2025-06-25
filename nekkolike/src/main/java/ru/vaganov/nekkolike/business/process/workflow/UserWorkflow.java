@@ -23,11 +23,11 @@ public class UserWorkflow {
         this.chatId = chatId;
     }
 
-    public void initRegistration() {
-        userRegistrationDto = new UserRegistrationDto(chatId);
+    public void initRegistration(Long chatId, String telegramUsername) {
+        userRegistrationDto = UserRegistrationDto.builder().chatId(chatId).telegramUsername(telegramUsername).build();
     }
 
     public void initCat(UUID catId) {
-        catRegistrationDto = new CatRegistrationDto(chatId, catId);
+        catRegistrationDto = CatRegistrationDto.builder().catId(catId).authorChatId(chatId).build();
     }
 }

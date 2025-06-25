@@ -1,25 +1,21 @@
 package ru.vaganov.nekkolike.common.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.File;
 import java.util.UUID;
 
 @Setter
 @Getter
+@Builder
 public class CatRegistrationDto {
 
-    private final Long authorChatId;
+    private Long authorChatId;
 
     private UUID catId;
 
-    private File photo;
+    private byte[] photo;
 
     private String catName;
-
-    public CatRegistrationDto(Long authorChatId, UUID catId) {
-        this.authorChatId = authorChatId;
-        this.catId = catId;
-    }
 }

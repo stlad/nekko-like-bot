@@ -9,9 +9,9 @@ import lombok.Setter;
 @Setter
 @Data
 public class RabbitRequestDto {
-    private final Long chatId;
-    private final String telegramUsername;
-    private final String errorText;
+    private Long chatId;
+    private String telegramUsername;
+    private String errorText;
 
     private CatRegistrationDto catRegistrationDto;
     private UserRegistrationDto userRegistrationDto;

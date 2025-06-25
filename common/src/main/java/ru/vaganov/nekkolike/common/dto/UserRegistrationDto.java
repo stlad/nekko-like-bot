@@ -1,16 +1,16 @@
 package ru.vaganov.nekkolike.common.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
+@Setter
+@Builder
 public class UserRegistrationDto {
     private final Long chatId;
 
-    @Setter
-    private String username;
+    private final String telegramUsername;
 
-    public UserRegistrationDto(Long chatId) {
-        this.chatId = chatId;
-    }
+    private String username;
 }

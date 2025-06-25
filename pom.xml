@@ -19,5 +19,6 @@
     <modules>
         <module>nekkolike</module>
         <module>common</module>
+        <module>nekko-service</module>
     </modules>
 </project>

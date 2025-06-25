@@ -24,7 +24,7 @@ public class JoinStartCommand implements WorkflowCommand {
         var flow = workflowRepository.findByChatId(chatId).orElse(new UserWorkflow(chatId));
         flow.setCurrentStep(WorkflowStep.JOIN_STARTED);
 
-        flow.initRegistration();
+        flow.initRegistration(chatId, data.telegramUsername());
         sender.send(MessageBuilder.askForName(chatId));
 
         log.info("Ожидается имя пользователя от {}", chatId);

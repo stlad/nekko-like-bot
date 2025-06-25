@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
-import ru.vaganov.nekkolike.nekko_service.business.user.dto.UserRegistrationDto;
+import ru.vaganov.nekkolike.common.dto.UserRegistrationDto;
 import ru.vaganov.nekkolike.nekko_service.business.user.entity.User;
 import ru.vaganov.nekkolike.nekko_service.exception.UserExistsException;
 
