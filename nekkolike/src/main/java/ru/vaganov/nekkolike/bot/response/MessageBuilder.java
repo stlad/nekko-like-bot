@@ -131,7 +131,8 @@ public class MessageBuilder {
         return new SendObjectWrapper(message.build(), chatId);
     }
 
-    public static SendObjectWrapper likeCatMenu(Long chatId, String username, String catName, UUID catId, File photo) {
+    public static SendObjectWrapper likeCatMenu(Long chatId, String username, String catName, UUID catId, File photo,
+                                                Integer likeCount, Integer dislikeCount) {
         var message = SendPhoto.builder()
                 .chatId(chatId.toString())
                 .photo(new InputFile((photo)))
@@ -140,10 +141,10 @@ public class MessageBuilder {
         var menu = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.MAIN_MENU));
         menu.setCallbackData(BotCommand.MOVE_TO_MAIN_MENU.getCallbackPrefix());
 
-        var like = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.SHOW_CATS_LIKE));
+        var like = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.SHOW_CATS_LIKE, likeCount));
         like.setCallbackData(BotCommand.SHOW_CATS_REVIEW.getCallbackPrefix() + "/LIKE" + "/" + catId.toString());
 
-        var dislike = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.SHOW_CATS_DISLIKE));
+        var dislike = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.SHOW_CATS_DISLIKE, dislikeCount));
         dislike.setCallbackData(BotCommand.SHOW_CATS_REVIEW.getCallbackPrefix() + "/DISLIKE" + "/" + catId.toString());
 
         var buttons1 = List.of(like, dislike);
