@@ -7,11 +7,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
+import ru.vaganov.nekkolike.bot.commands.BotCommand;
 import ru.vaganov.nekkolike.bot.exceptions.CommandProcessingFailedException;
 import ru.vaganov.nekkolike.bot.response.TelegramMessageSender;
 import ru.vaganov.nekkolike.bot.service.CommandExecutor;
 import ru.vaganov.nekkolike.bot.utils.TelegramBotUtils;
 import ru.vaganov.nekkolike.business.process.workflow.UserWorkflow;
+import ru.vaganov.nekkolike.business.process.workflow.WorkflowStep;
 import ru.vaganov.nekkolike.business.process.workflow.repository.WorkflowRepository;
 import ru.vaganov.nekkolike.common.dto.RabbitResponseDto;
 
@@ -38,16 +40,11 @@ public class RabbitMQResponseListener {
         var flow = workflowRepository.findByChatId(updateData.chatId())
                 .orElse(new UserWorkflow(updateData.chatId()));
 
-//        TODO Пример обработки команд
-//        if(dto.getCatReview() != null && SHOW_CATS_REVIEW.equals(flow.getCurrentStep())){
-//            flow.setCatReviewDto(dto.getCatReview());
-//            workflowRepository.saveFlow(flow);
-//            commandExecutor.executeCommand(WorkflowStep.SHOW_CAT_RECEIVED, updateData, telegramMessageSender);
-//        }
-//        else{
-//            throw new CommandProcessingFailedException();
-//        }
-//        Для других команд.......
+        switch (dto.getAction()) {
+            case GET_RANDOM_CAT_RESPONSE -> {
+                commandExecutor.executeCommand(BotCommand.SHOW_CAT_RECEIVED, updateData, telegramMessageSender);
+            }
+        }
     }
 
 }

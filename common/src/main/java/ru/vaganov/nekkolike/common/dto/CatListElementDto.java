@@ -1,4 +1,4 @@
-package ru.vaganov.nekkolike.nekko_service.business.cat.dto;
+package ru.vaganov.nekkolike.common.dto;
 
 import java.util.UUID;
 

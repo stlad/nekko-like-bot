@@ -47,7 +47,7 @@ public class RabbitMQConfig {
     public Binding responseBinding(Queue responseQueue, DirectExchange exchange) {
         return BindingBuilder.bind(responseQueue)
                 .to(exchange)
-                .with(routingRequestKey);
+                .with(routingResponseKey);
     }
 
 }

@@ -19,7 +19,7 @@ public class RabbitMQResponseSender {
     public RabbitMQResponseSender(
             RabbitTemplate rabbitTemplate,
             @Value("${spring.rabbitmq.exchange.name}") String exchangeName,
-            @Value("${spring.rabbitmq.routing.request_key}")String routingKey, ObjectMapper objectMapper) {
+            @Value("${spring.rabbitmq.routing.response_key}")String routingKey, ObjectMapper objectMapper) {
         this.rabbitTemplate = rabbitTemplate;
         this.exchangeName = exchangeName;
         this.routingKey = routingKey;

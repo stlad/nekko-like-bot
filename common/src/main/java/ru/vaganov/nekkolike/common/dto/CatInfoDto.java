@@ -1,14 +1,13 @@
-package ru.vaganov.nekkolike.business.process.workflow.dto;
+package ru.vaganov.nekkolike.common.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Builder;
+import lombok.Data;
 
-import java.io.File;
 import java.util.UUID;
 
-@Setter
-@Getter
-public class CatReviewDto {
+@Data
+@Builder
+public class CatInfoDto {
 
     private Long authorChatId;
 
@@ -16,7 +15,9 @@ public class CatReviewDto {
 
     private UUID catId;
 
-    private File photo;
+    private String photoName;
+
+    private byte[] photo;
 
     private String catName;
 
@@ -24,5 +25,3 @@ public class CatReviewDto {
 
     private Integer dislikeCount;
 }
-
-

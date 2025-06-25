@@ -26,7 +26,6 @@ public class RabbitMQRequestSender {
         this.objectMapper = objectMapper;
     }
 
-    //TODO Инжектится в backendClient
     public void sendMessage(RabbitRequestDto dto) {
         String message = null;
         try {

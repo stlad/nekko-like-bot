@@ -2,7 +2,7 @@ package ru.vaganov.nekkolike.business.process.workflow;
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.vaganov.nekkolike.business.process.workflow.dto.CatReviewDto;
+import ru.vaganov.nekkolike.common.dto.CatInfoDto;
 import ru.vaganov.nekkolike.common.dto.CatRegistrationDto;
 import ru.vaganov.nekkolike.common.dto.UserRegistrationDto;
 
@@ -19,7 +19,7 @@ public class UserWorkflow {
 
     private UserRegistrationDto userRegistrationDto;
     private CatRegistrationDto catRegistrationDto;
-    private CatReviewDto catReviewDto;
+    private CatInfoDto catInfoDto;
 
     public UserWorkflow(Long chatId) {
         this.chatId = chatId;
