@@ -33,6 +33,7 @@ public class ShowCatReviewCommand implements WorkflowCommand {
             backendClient.dislikeCat(chatId, catId);
         }
 
+        flow.setCurrentStep(WorkflowStep.SHOW_CAT_RECEIVED);
         backendClient.requestRandomCat(chatId);
     }
 

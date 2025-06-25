@@ -3,6 +3,9 @@ package ru.vaganov.nekkolike.business.process.workflow;
 import lombok.Getter;
 import lombok.Setter;
 import ru.vaganov.nekkolike.business.process.workflow.dto.*;
+import ru.vaganov.nekkolike.business.process.workflow.dto.CatReviewDto;
+import ru.vaganov.nekkolike.business.process.workflow.dto.CatRegistrationDto;
+import ru.vaganov.nekkolike.business.process.workflow.dto.UserRegistrationDto;
 
 import java.util.UUID;
 
