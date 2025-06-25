@@ -40,8 +40,11 @@ public class RabbitMQResponseListener {
         var flow = workflowRepository.findByChatId(updateData.chatId())
                 .orElse(new UserWorkflow(updateData.chatId()));
 
+
         switch (dto.getAction()) {
             case GET_RANDOM_CAT_RESPONSE -> {
+                flow.setCatInfoDto(dto.getCatInfoDto());
+                workflowRepository.saveFlow(flow);
                 commandExecutor.executeCommand(BotCommand.SHOW_CAT_RECEIVED, updateData, telegramMessageSender);
             }
         }
