@@ -23,7 +23,7 @@ public class ShowCatRecievedCommand implements WorkflowCommand {
         log.info("Пользователь {} получил котика для оценки", chatId);
         var flow = workflowRepository.findByChatId(chatId).orElse(new UserWorkflow(chatId));
 
-        var catDto = flow.getCatReviewDto();
+        var catDto = flow.getCatInfoDto();
 
         sender.send(MessageBuilder.likeCatMenu(chatId, catDto.getAuthorTelegramUsername(), catDto.getCatName(),
                 catDto.getCatId(), catDto.getPhoto(), catDto.getLikeCount(), catDto.getDislikeCount()));

@@ -7,6 +7,21 @@ spring:
     username: postgres
     password: admin
 
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: password
+    queue_request:
+      name: NEKKO_REQUEST_QUEUE
+    queue_response:
+      name: NEKKO_RESPONSE_QUEUE
+    exchange:
+      name: nekko-exchange
+    routing:
+      request_key: nekko.request.key
+      response_key: nekko.response.key
+
   jpa:
     generate-ddl: true
     hibernate:

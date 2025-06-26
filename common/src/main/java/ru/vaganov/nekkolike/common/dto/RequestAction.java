@@ -1,0 +1,12 @@
+package ru.vaganov.nekkolike.common.dto;
+
+public enum RequestAction {
+    REGISTER_USER_REQUEST,
+    REGISTER_CAT_REQUEST,
+    LIKE_CAT_REQUEST,
+    DISLIKE_CAT_REQUEST,
+    GET_RANDOM_CAT_REQUEST,
+    DELETE_CAT_REQUEST,
+    GET_CONCRETE_CAT_REQUEST,
+    GET_CAT_LIST_REQUEST
+}

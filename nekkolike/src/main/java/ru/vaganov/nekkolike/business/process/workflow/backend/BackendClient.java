@@ -1,7 +1,8 @@
 package ru.vaganov.nekkolike.business.process.workflow.backend;
 
-import ru.vaganov.nekkolike.business.process.workflow.dto.CatRegistrationDto;
-import ru.vaganov.nekkolike.business.process.workflow.dto.UserRegistrationDto;
+
+import ru.vaganov.nekkolike.common.dto.CatRegistrationDto;
+import ru.vaganov.nekkolike.common.dto.UserRegistrationDto;
 
 import java.util.UUID;
 
