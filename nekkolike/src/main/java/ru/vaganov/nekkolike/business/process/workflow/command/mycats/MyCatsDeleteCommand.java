@@ -30,7 +30,6 @@ public class MyCatsDeleteCommand implements WorkflowCommand {
 
         sender.send(MessageBuilder.deleteCat(chatId));
         backendClient.deleteCat(chatId, UUID.fromString(catId));
-        sender.send(MessageBuilder.mainMenu(chatId));
     }
 
     @Override
