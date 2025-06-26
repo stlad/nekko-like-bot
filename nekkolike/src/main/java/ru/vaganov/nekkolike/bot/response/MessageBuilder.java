@@ -9,10 +9,9 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.vaganov.nekkolike.bot.commands.BotCommand;
 import ru.vaganov.nekkolike.bot.utils.SendObjectWrapper;
-import ru.vaganov.nekkolike.business.process.workflow.dto.MyCatsDto;
+import ru.vaganov.nekkolike.common.dto.CatListElementDto;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -159,23 +158,23 @@ public class MessageBuilder {
         return new SendObjectWrapper(message.build(), chatId);
     }
 
-    public static SendObjectWrapper catListMenu(Long chatId, List<MyCatsDto.CatListElement> cats) {
+    public static SendObjectWrapper catListMenu(Long chatId, List<CatListElementDto> cats) {
         var message = simpleTextByTemplate(chatId, MessageTemplate.MY_CATS_LIST);
 
         var menu = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.MAIN_MENU));
         menu.setCallbackData(BotCommand.MOVE_TO_MAIN_MENU.getCallbackPrefix());
 
         var prev = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.PREV));
-        menu.setCallbackData(BotCommand.MY_CATS_PAGE.getCallbackPrefix() + "/PREV");
+        prev.setCallbackData(BotCommand.MY_CATS.getCallbackPrefix() + "/PREV");
 
         var next = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.NEXT));
-        menu.setCallbackData(BotCommand.MY_CATS_PAGE.getCallbackPrefix() + "/NEXT");
+        next.setCallbackData(BotCommand.MY_CATS.getCallbackPrefix() + "/NEXT");
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         var currentCatRow = new ArrayList<InlineKeyboardButton>();
         for (int i = 0; i < cats.size(); i++) {
             currentCatRow.add(createCatListButton(cats.get(i).catName(), cats.get(i).catId()));
-            if (i % ROW_SIZE == 0) {
+            if (currentCatRow.size() == ROW_SIZE || i == cats.size() - 1) {
                 rows.add(currentCatRow);
                 currentCatRow = new ArrayList<>();
             }
@@ -195,19 +194,20 @@ public class MessageBuilder {
         return cat;
     }
 
-    public static SendObjectWrapper catInfoMenu(Long chatId, String username, String catName, UUID catId, File photo) {
+    public static SendObjectWrapper catInfoMenu(Long chatId, String username, String catName, UUID catId, byte[] photo) {
+        var inputFile = new InputFile(new ByteArrayInputStream(photo), catId.toString());
         var message = SendPhoto.builder()
                 .chatId(chatId.toString())
-                .photo(new InputFile((photo)))
+                .photo(inputFile)
                 .caption(MessageTemplate.apply(MessageTemplate.ADD_CAT_ACCEPT_TEXT, catName, username));
 
         var menu = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.MAIN_MENU));
         menu.setCallbackData(BotCommand.MOVE_TO_MAIN_MENU.getCallbackPrefix());
 
-        var delete = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.SHOW_CATS_LIKE));
+        var delete = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.MY_CATS_DELETE));
         delete.setCallbackData(BotCommand.MY_CATS_DELETE.getCallbackPrefix() + "/" + catId.toString());
 
-        var buttons1 = List.of(delete, delete);
+        var buttons1 = List.of(delete);
         var buttons2 = List.of(menu);
         var rows = List.of(buttons1, buttons2);
 

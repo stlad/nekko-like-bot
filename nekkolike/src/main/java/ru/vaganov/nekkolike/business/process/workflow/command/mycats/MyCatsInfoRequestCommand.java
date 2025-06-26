@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import ru.vaganov.nekkolike.bot.exceptions.WorkflowNotFoundException;
 import ru.vaganov.nekkolike.bot.response.TelegramMessageSender;
 import ru.vaganov.nekkolike.bot.utils.UpdateData;
+import ru.vaganov.nekkolike.business.process.workflow.UserWorkflow;
 import ru.vaganov.nekkolike.business.process.workflow.WorkflowStep;
 import ru.vaganov.nekkolike.business.process.workflow.backend.BackendClient;
 import ru.vaganov.nekkolike.business.process.workflow.command.WorkflowCommand;
@@ -24,8 +25,8 @@ public class MyCatsInfoRequestCommand implements WorkflowCommand {
     public void execute(UpdateData data, TelegramMessageSender sender) {
         var chatId = data.chatId();
         log.info("Пользователь {} запрашивает информацию о котике", chatId);
-        var flow = workflowRepository.findByChatId(chatId).orElseThrow(() -> new WorkflowNotFoundException(chatId));
-        var catId = data.params()[1];
+        var flow = workflowRepository.findByChatId(chatId).orElse(new UserWorkflow(chatId));
+        var catId = data.params()[0];
 
         backendClient.getCat(chatId, UUID.fromString(catId));
 

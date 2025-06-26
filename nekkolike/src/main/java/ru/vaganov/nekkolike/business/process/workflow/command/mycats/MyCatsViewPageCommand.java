@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import ru.vaganov.nekkolike.bot.exceptions.WorkflowNotFoundException;
 import ru.vaganov.nekkolike.bot.response.TelegramMessageSender;
 import ru.vaganov.nekkolike.bot.utils.UpdateData;
+import ru.vaganov.nekkolike.business.process.workflow.UserWorkflow;
 import ru.vaganov.nekkolike.business.process.workflow.WorkflowStep;
 import ru.vaganov.nekkolike.business.process.workflow.backend.BackendClient;
 import ru.vaganov.nekkolike.business.process.workflow.command.WorkflowCommand;
@@ -22,17 +23,18 @@ public class MyCatsViewPageCommand implements WorkflowCommand {
     public void execute(UpdateData data, TelegramMessageSender sender) {
         var chatId = data.chatId();
         log.info("Пользователь {} начал процесс просмотра своих котиков", chatId);
-        var flow = workflowRepository.findByChatId(chatId).orElseThrow(() -> new WorkflowNotFoundException(chatId));
+        var flow = workflowRepository.findByChatId(chatId).orElse(new UserWorkflow(chatId));
 
         var params = data.params()[0];
         switch (params) {
-            case "NEXT" -> flow.getMyCatsDto().nextPage();
-            case "PREV" -> flow.getMyCatsDto().prevPage();
+            case "NEXT" -> flow.getCatListDto().nextPage();
+            case "PREV" -> flow.getCatListDto().prevPage();
             default -> flow.initCatList();
         }
 
-        backendClient.getCatPage(chatId, flow.getMyCatsDto().getPage(), flow.getMyCatsDto().getPageSize());
+        backendClient.getCatPage(chatId, flow.getCatListDto().getPage(), flow.getCatListDto().getPageSize());
 
+        flow.setCurrentStep(WorkflowStep.MY_CATS_VIEW_PAGE_RECEIVED);
         workflowRepository.saveFlow(flow);
     }
 

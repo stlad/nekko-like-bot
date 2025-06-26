@@ -51,17 +51,19 @@ public class BackendClientImpl implements BackendClient {
     @Override
     public void getCatPage(Long chatId, Integer page, Integer size) {
         log.info("Получение страницы с котиками {} {} {}", chatId, page, size);
+        requestSender.sendMessage(RabbitRequestDto.catPage(chatId, page, size));
 
     }
 
     @Override
     public void deleteCat(Long chatId, UUID catId) {
-
         log.info("Удаление котика");
+        requestSender.sendMessage(RabbitRequestDto.deleteCat(chatId, catId));
     }
 
     @Override
     public void getCat(Long chatId, UUID catId) {
         log.info("Получение страницы котика");
+        requestSender.sendMessage(RabbitRequestDto.concreteCat(chatId, catId));
     }
 }

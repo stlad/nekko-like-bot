@@ -26,10 +26,11 @@ public class MyCatsDeleteCommand implements WorkflowCommand {
         var chatId = data.chatId();
         log.info("Пользователь {} запрашивает удаление котика", chatId);
         var flow = workflowRepository.findByChatId(chatId).orElseThrow(() -> new WorkflowNotFoundException(chatId));
-        var catId = data.params()[1];
+        var catId = data.params()[0];
 
         sender.send(MessageBuilder.deleteCat(chatId));
         backendClient.deleteCat(chatId, UUID.fromString(catId));
+        sender.send(MessageBuilder.mainMenu(chatId));
     }
 
     @Override

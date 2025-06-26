@@ -48,14 +48,14 @@ public class RabbitMQRequestListener {
             case LIKE_CAT_REQUEST -> catService.rateCat(dto.getCatId(), dto.getChatId(), ReviewRate.LIKE);
             case DISLIKE_CAT_REQUEST -> catService.rateCat(dto.getCatId(), dto.getChatId(), ReviewRate.DISLIKE);
             case GET_CONCRETE_CAT_REQUEST -> {
-                //TODO ОБработка запроса на котика по ИД
+                var response = catService.findById(dto.getCatId());
+                responseSender.sendMessage(RabbitResponseDto.concreteCat(dto.getChatId(), response));
             }
             case GET_CAT_LIST_REQUEST -> {
-                //TODO ОБработка запроса на страницу с котиками по ИД
+                var response = catService.getCatNamesByAuthor(dto.getChatId(), dto.getPage(), dto.getPageSize());
+                responseSender.sendMessage(RabbitResponseDto.catList(dto.getChatId(), response));
             }
-            case DELETE_CAT_REQUEST -> {
-                //TODO ОБработка запроса на удаление котика по ИД
-            }
+            case DELETE_CAT_REQUEST -> catService.deleteCat(dto.getCatId());
             default -> {
                 log.error("Не удалось распознать команду");
                 responseSender.sendMessage(RabbitResponseDto.error(dto.getChatId(), "Не удалось распознать команду"));

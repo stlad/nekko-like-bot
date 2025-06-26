@@ -8,7 +8,6 @@ import ru.vaganov.nekkolike.bot.response.TelegramMessageSender;
 import ru.vaganov.nekkolike.bot.utils.UpdateData;
 import ru.vaganov.nekkolike.business.process.workflow.UserWorkflow;
 import ru.vaganov.nekkolike.business.process.workflow.WorkflowStep;
-import ru.vaganov.nekkolike.business.process.workflow.backend.BackendClient;
 import ru.vaganov.nekkolike.business.process.workflow.command.WorkflowCommand;
 import ru.vaganov.nekkolike.business.process.workflow.repository.WorkflowRepository;
 
@@ -24,7 +23,7 @@ public class MyCatsViewPageReceivedCommand implements WorkflowCommand {
         log.info("Пользователь {} получил страницу котиков", chatId);
         var flow = workflowRepository.findByChatId(chatId).orElse(new UserWorkflow(chatId));
 
-        sender.send(MessageBuilder.catListMenu(chatId, flow.getMyCatsDto().getCats()));
+        sender.send(MessageBuilder.catListMenu(chatId, flow.getCatListDto().getCats()));
     }
 
     @Override
