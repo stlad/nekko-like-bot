@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.vaganov.nekkolike.bot.commands.BotCommand;
+import ru.vaganov.nekkolike.bot.commands.PagingDirection;
 import ru.vaganov.nekkolike.bot.utils.SendObjectWrapper;
 import ru.vaganov.nekkolike.common.dto.CatListElementDto;
 
@@ -53,7 +54,7 @@ public class MessageBuilder {
         showCats.setCallbackData(BotCommand.SHOW_CATS.getCallbackPrefix());
 
         var myCats = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.MY_CATS));
-        myCats.setCallbackData(BotCommand.MY_CATS.getCallbackPrefix());
+        myCats.setCallbackData(BotCommand.MY_CATS.getCallbackPrefix() + "/" + PagingDirection.FIRST.name());
 
         var buttons1 = List.of(addCat, showCats, myCats);
         var buttons2 = List.of(menu);
@@ -165,10 +166,10 @@ public class MessageBuilder {
         menu.setCallbackData(BotCommand.MOVE_TO_MAIN_MENU.getCallbackPrefix());
 
         var prev = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.PREV));
-        prev.setCallbackData(BotCommand.MY_CATS.getCallbackPrefix() + "/PREV");
+        prev.setCallbackData(BotCommand.MY_CATS.getCallbackPrefix() + "/" + PagingDirection.PREV.name());
 
         var next = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.NEXT));
-        next.setCallbackData(BotCommand.MY_CATS.getCallbackPrefix() + "/NEXT");
+        next.setCallbackData(BotCommand.MY_CATS.getCallbackPrefix() + "/" + PagingDirection.NEXT.name());
 
         var rows = new ArrayList<List<InlineKeyboardButton>>();
         var currentCatRow = new ArrayList<InlineKeyboardButton>();
