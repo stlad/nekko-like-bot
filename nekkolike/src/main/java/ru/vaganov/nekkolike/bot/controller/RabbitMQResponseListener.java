@@ -9,6 +9,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 import ru.vaganov.nekkolike.bot.commands.BotCommand;
 import ru.vaganov.nekkolike.bot.exceptions.CommandProcessingFailedException;
+import ru.vaganov.nekkolike.bot.response.MessageBuilder;
 import ru.vaganov.nekkolike.bot.response.TelegramMessageSender;
 import ru.vaganov.nekkolike.bot.service.CommandExecutor;
 import ru.vaganov.nekkolike.bot.utils.TelegramBotUtils;
@@ -46,6 +47,12 @@ public class RabbitMQResponseListener {
                 flow.setCatInfoDto(dto.getCatInfoDto());
                 workflowRepository.saveFlow(flow);
                 commandExecutor.executeCommand(BotCommand.SHOW_CAT_RECEIVED, updateData, telegramMessageSender);
+            }
+            case ERROR -> {
+                log.error("На сервере произошла ошибка: {}", dto.getErrorText());
+                telegramMessageSender.send(
+                        MessageBuilder.errorResponse(dto.getChatId(), "На сервере произошла ошибка")
+                );
             }
         }
     }
