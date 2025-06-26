@@ -10,8 +10,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import ru.vaganov.nekkolike.bot.commands.BotCommand;
 import ru.vaganov.nekkolike.bot.utils.SendObjectWrapper;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.util.List;
 import java.util.UUID;
 
@@ -106,10 +106,11 @@ public class MessageBuilder {
         return simpleTextByTemplate(chatId, MessageTemplate.GREETINGS, username);
     }
 
-    public static SendObjectWrapper acceptCatName(Long chatId, String username, String catName, UUID catId, File photo) {
+    public static SendObjectWrapper acceptCatName(Long chatId, String username, String catName, UUID catId, byte[] photo) {
+        var inputFile = new InputFile(new ByteArrayInputStream(photo), catId.toString());
         var message = SendPhoto.builder()
                 .chatId(chatId.toString())
-                .photo(new InputFile((photo)))
+                .photo(inputFile)
                 .caption(MessageTemplate.apply(MessageTemplate.ADD_CAT_ACCEPT_TEXT, catName, username));
 
         var menu = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.MAIN_MENU));
@@ -131,11 +132,12 @@ public class MessageBuilder {
         return new SendObjectWrapper(message.build(), chatId);
     }
 
-    public static SendObjectWrapper likeCatMenu(Long chatId, String username, String catName, UUID catId, File photo,
+    public static SendObjectWrapper likeCatMenu(Long chatId, String username, String catName, UUID catId, byte[] photo,
                                                 Integer likeCount, Integer dislikeCount) {
+        var inputFile = new InputFile(new ByteArrayInputStream(photo), catId.toString());
         var message = SendPhoto.builder()
                 .chatId(chatId.toString())
-                .photo(new InputFile((photo)))
+                .photo(inputFile)
                 .caption(MessageTemplate.apply(MessageTemplate.ADD_CAT_ACCEPT_TEXT, catName, username));
 
         var menu = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.MAIN_MENU));

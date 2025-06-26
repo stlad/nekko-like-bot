@@ -3,10 +3,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.5</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<groupId>ru.vaganov</groupId>
+		<artifactId>nekkolike-project</artifactId>
+		<version>0.0.1</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<groupId>ru.vaganov.nekkolike</groupId>
 	<artifactId>nekko-service</artifactId>
@@ -22,6 +22,16 @@
 	</properties>
 
 	<dependencies>
+
+		<dependency>
+			<groupId>ru.vaganov</groupId>
+			<artifactId>common</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-amqp</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>

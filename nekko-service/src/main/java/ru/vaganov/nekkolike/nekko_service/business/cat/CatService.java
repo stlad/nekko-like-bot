@@ -7,10 +7,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-import ru.vaganov.nekkolike.nekko_service.business.cat.dto.CatInfoDto;
-import ru.vaganov.nekkolike.nekko_service.business.cat.dto.CatListDto;
-import ru.vaganov.nekkolike.nekko_service.business.cat.dto.CatRegistrationDto;
+import ru.vaganov.nekkolike.common.dto.CatInfoDto;
+import ru.vaganov.nekkolike.common.dto.CatListDto;
+import ru.vaganov.nekkolike.common.dto.CatRegistrationDto;
 import ru.vaganov.nekkolike.nekko_service.business.cat.entity.Cat;
+import ru.vaganov.nekkolike.nekko_service.business.cat.repository.CatRatingRepository;
+import ru.vaganov.nekkolike.nekko_service.business.cat.repository.CatRepository;
 import ru.vaganov.nekkolike.nekko_service.business.review.entity.Review;
 import ru.vaganov.nekkolike.nekko_service.business.review.entity.ReviewRate;
 import ru.vaganov.nekkolike.nekko_service.business.review.entity.ReviewRepository;
@@ -27,9 +29,11 @@ public class CatService {
     private final ContentManager contentManager;
     private final UserRepository userRepository;
     private final ReviewRepository reviewRepository;
+    private final CatRatingRepository catRatingRepository;
 
     @Transactional
     public Cat createCat(CatRegistrationDto dto) {
+        log.info("Регистрация котика {} от {}", dto.getCatName(), dto.getCatId());
         var user = userRepository.findByChatId(dto.getAuthorChatId())
                 .orElseThrow(() -> new EntityNotFoundException("Не найден пользователь с чат-ид" + dto.getAuthorChatId()));
         var photoName = dto.getAuthorChatId() + "/" + dto.getCatId() + ".jpg";
@@ -59,10 +63,7 @@ public class CatService {
 
     @Transactional
     public CatInfoDto findRandomCat() {
-        var cat = catRepository.findRandomCat();
-        var photo = contentManager.loadFile(cat.getPhotoName());
-        cat.setPhoto(photo);
-        return cat;
+        return catRatingRepository.findRandom();
     }
 
     @Transactional

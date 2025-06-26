@@ -25,8 +25,8 @@ public class ShowCatReviewCommand implements WorkflowCommand {
         var chatId = data.chatId();
         log.info("Пользователь {} лайкнул котика", chatId);
         var flow = workflowRepository.findByChatId(chatId).orElse(new UserWorkflow(chatId));
-        var isLike = "LIKE".equals(data.params()[1]);
-        var catId = UUID.fromString(data.params()[2]);
+        var isLike = "LIKE".equals(data.params()[0]);
+        var catId = UUID.fromString(data.params()[1]);
         if (isLike) {
             backendClient.likeCat(chatId, catId);
         } else {
