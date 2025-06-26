@@ -1,6 +1,7 @@
 package ru.vaganov.nekkolike.business.process.workflow.backend;
 
 
+import ru.vaganov.nekkolike.common.dto.CatListDto;
 import ru.vaganov.nekkolike.common.dto.CatRegistrationDto;
 import ru.vaganov.nekkolike.common.dto.UserRegistrationDto;
 
@@ -18,7 +19,9 @@ public interface BackendClient {
 
     void registerUser(Long chatId, UserRegistrationDto dto);
 
-    void getCatPage(Long chatId, Integer page, Integer size);
+    void getNextCatPage(Long chatId, CatListDto dto);
+
+    void getPrevCatPage(Long chatId, CatListDto dto);
 
     void deleteCat(Long chatId, UUID catId);
 

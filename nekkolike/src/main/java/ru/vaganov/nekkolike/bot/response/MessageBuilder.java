@@ -53,7 +53,7 @@ public class MessageBuilder {
         showCats.setCallbackData(BotCommand.SHOW_CATS.getCallbackPrefix());
 
         var myCats = new InlineKeyboardButton(MessageTemplate.apply(MessageTemplate.MY_CATS));
-        myCats.setCallbackData(BotCommand.MY_CATS.getCallbackPrefix() + "/NONE");
+        myCats.setCallbackData(BotCommand.MY_CATS.getCallbackPrefix());
 
         var buttons1 = List.of(addCat, showCats, myCats);
         var buttons2 = List.of(menu);

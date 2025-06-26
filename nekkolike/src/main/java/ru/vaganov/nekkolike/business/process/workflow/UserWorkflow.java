@@ -34,8 +34,4 @@ public class UserWorkflow {
     public void initCat(UUID catId) {
         catRegistrationDto = CatRegistrationDto.builder().catId(catId).authorChatId(chatId).build();
     }
-
-    public void initCatList() {
-        catListDto = new CatListDto();
-    }
 }

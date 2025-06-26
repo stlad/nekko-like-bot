@@ -25,3 +25,6 @@ telegram:
 
 content-manager:
   base-path: C:\Projects\nekko-like-bot\nekkolike\data\library\
+
+nekko-service:
+  cat-page-size: 9
