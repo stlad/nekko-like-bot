@@ -48,6 +48,12 @@ public class RabbitMQResponseListener {
                 workflowRepository.saveFlow(flow);
                 commandExecutor.executeCommand(BotCommand.SHOW_CAT_RECEIVED, updateData, telegramMessageSender);
             }
+            case GET_CONCRETE_CAT_RESPONSE -> {
+                //TODO Обработка получения инфмаорции о котике по ID
+            }
+            case GET_CAT_LIST_RESPONSE -> {
+                //TODO Обработка получения страницы с котиками
+            }
             case ERROR -> {
                 log.error("На сервере произошла ошибка: {}", dto.getErrorText());
                 telegramMessageSender.send(

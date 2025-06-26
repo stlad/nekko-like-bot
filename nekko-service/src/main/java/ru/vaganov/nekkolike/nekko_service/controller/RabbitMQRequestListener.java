@@ -47,6 +47,15 @@ public class RabbitMQRequestListener {
             }
             case LIKE_CAT_REQUEST -> catService.rateCat(dto.getCatId(), dto.getChatId(), ReviewRate.LIKE);
             case DISLIKE_CAT_REQUEST -> catService.rateCat(dto.getCatId(), dto.getChatId(), ReviewRate.DISLIKE);
+            case GET_CONCRETE_CAT_REQUEST -> {
+                //TODO ОБработка запроса на котика по ИД
+            }
+            case GET_CAT_LIST_REQUEST -> {
+                //TODO ОБработка запроса на страницу с котиками по ИД
+            }
+            case DELETE_CAT_REQUEST -> {
+                //TODO ОБработка запроса на удаление котика по ИД
+            }
             default -> {
                 log.error("Не удалось распознать команду");
                 responseSender.sendMessage(RabbitResponseDto.error(dto.getChatId(), "Не удалось распознать команду"));
