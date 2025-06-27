@@ -16,6 +16,7 @@ public class RabbitResponseDto {
     private String errorText;
 
     private CatInfoDto catInfoDto;
+    private CatListDto catListDto;
 
 
     public static RabbitResponseDto randomCat(Long chatId, CatInfoDto dto) {
@@ -23,6 +24,22 @@ public class RabbitResponseDto {
                 .chatId(chatId)
                 .catInfoDto(dto)
                 .action(ResponseAction.GET_RANDOM_CAT_RESPONSE)
+                .build();
+    }
+
+    public static RabbitResponseDto concreteCat(Long chatId, CatInfoDto dto) {
+        return RabbitResponseDto.builder()
+                .chatId(chatId)
+                .catInfoDto(dto)
+                .action(ResponseAction.GET_CONCRETE_CAT_RESPONSE)
+                .build();
+    }
+
+    public static RabbitResponseDto catList(Long chatId, CatListDto dto) {
+        return RabbitResponseDto.builder()
+                .chatId(chatId)
+                .catListDto(dto)
+                .action(ResponseAction.GET_CAT_LIST_RESPONSE)
                 .build();
     }
 

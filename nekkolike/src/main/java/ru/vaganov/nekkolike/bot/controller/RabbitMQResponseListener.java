@@ -14,7 +14,6 @@ import ru.vaganov.nekkolike.bot.response.TelegramMessageSender;
 import ru.vaganov.nekkolike.bot.service.CommandExecutor;
 import ru.vaganov.nekkolike.bot.utils.TelegramBotUtils;
 import ru.vaganov.nekkolike.business.process.workflow.UserWorkflow;
-import ru.vaganov.nekkolike.business.process.workflow.WorkflowStep;
 import ru.vaganov.nekkolike.business.process.workflow.repository.WorkflowRepository;
 import ru.vaganov.nekkolike.common.dto.RabbitResponseDto;
 
@@ -49,10 +48,14 @@ public class RabbitMQResponseListener {
                 commandExecutor.executeCommand(BotCommand.SHOW_CAT_RECEIVED, updateData, telegramMessageSender);
             }
             case GET_CONCRETE_CAT_RESPONSE -> {
-                //TODO Обработка получения инфмаорции о котике по ID
+                flow.setCatInfoDto(dto.getCatInfoDto());
+                workflowRepository.saveFlow(flow);
+                commandExecutor.executeCommand(BotCommand.MY_CATS_INFO_RECEIVED, updateData, telegramMessageSender);
             }
             case GET_CAT_LIST_RESPONSE -> {
-                //TODO Обработка получения страницы с котиками
+                flow.setCatListDto(dto.getCatListDto());
+                workflowRepository.saveFlow(flow);
+                commandExecutor.executeCommand(BotCommand.MY_CATS_PAGE_RECEIVED, updateData, telegramMessageSender);
             }
             case ERROR -> {
                 log.error("На сервере произошла ошибка: {}", dto.getErrorText());

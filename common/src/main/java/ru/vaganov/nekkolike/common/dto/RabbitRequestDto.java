@@ -21,6 +21,8 @@ public class RabbitRequestDto {
 
     private CatRegistrationDto catRegistrationDto;
     private UserRegistrationDto userRegistrationDto;
+    private Integer page;
+    private Integer pageSize;
 
     public static RabbitRequestDto likeCat(Long chatId, UUID catId) {
         return RabbitRequestDto.
@@ -64,6 +66,34 @@ public class RabbitRequestDto {
                 builder()
                 .action(RequestAction.GET_RANDOM_CAT_REQUEST)
                 .chatId(chatId)
+                .build();
+    }
+
+    public static RabbitRequestDto concreteCat(Long chatId, UUID catId) {
+        return RabbitRequestDto.
+                builder()
+                .action(RequestAction.GET_CONCRETE_CAT_REQUEST)
+                .chatId(chatId)
+                .catId(catId)
+                .build();
+    }
+
+    public static RabbitRequestDto deleteCat(Long chatId, UUID catId) {
+        return RabbitRequestDto.
+                builder()
+                .action(RequestAction.DELETE_CAT_REQUEST)
+                .chatId(chatId)
+                .catId(catId)
+                .build();
+    }
+
+    public static RabbitRequestDto catPage(Long chatId, Integer page, Integer pageSize) {
+        return RabbitRequestDto.
+                builder()
+                .action(RequestAction.GET_CAT_LIST_REQUEST)
+                .chatId(chatId)
+                .page(page)
+                .pageSize(pageSize)
                 .build();
     }
 }
